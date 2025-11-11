@@ -1,0 +1,7 @@
+AA = 10
+A = 10
+B = 20
+C = A + B
+PRINT C
+C = (A + B) * 5
+PRINT C
