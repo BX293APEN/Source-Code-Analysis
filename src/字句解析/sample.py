@@ -155,5 +155,5 @@ if __name__ == "__main__":
 
     with LexicalAnalyze(program) as l:
         result = l.parse()
-        
-    input()
+
+    input("終了")
