@@ -1,0 +1,497 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> statements
+Rule 1     statements -> statement statements
+Rule 2     statements -> empty
+Rule 3     empty -> <empty>
+Rule 4     statement -> p_statement
+Rule 5     statement -> a_statement
+Rule 6     p_statement -> PRINT expression
+Rule 7     a_statement -> SYMBOL EQUAL expression
+Rule 8     expression -> expression PLUS term
+Rule 9     expression -> expression MINUS term
+Rule 10    expression -> term
+Rule 11    term -> term TIMES factor
+Rule 12    term -> term DIVIDE factor
+Rule 13    term -> factor
+Rule 14    factor -> num
+Rule 15    factor -> MINUS num
+Rule 16    factor -> LPAREN expression RPAREN
+Rule 17    num -> NUMBER
+Rule 18    num -> SYMBOL
+
+Terminals, with rules where they appear
+
+DIVIDE               : 12
+EQUAL                : 7
+LPAREN               : 16
+MINUS                : 9 15
+NUMBER               : 17
+PLUS                 : 8
+PRINT                : 6
+RPAREN               : 16
+SYMBOL               : 7 18
+TIMES                : 11
+error                : 
+
+Nonterminals, with rules where they appear
+
+a_statement          : 5
+empty                : 2
+expression           : 6 7 8 9 16
+factor               : 11 12 13
+num                  : 14 15
+p_statement          : 4
+statement            : 1
+statements           : 1 0
+term                 : 8 9 10 11 12
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statements
+    (1) statements -> . statement statements
+    (2) statements -> . empty
+    (4) statement -> . p_statement
+    (5) statement -> . a_statement
+    (3) empty -> .
+    (6) p_statement -> . PRINT expression
+    (7) a_statement -> . SYMBOL EQUAL expression
+
+    $end            reduce using rule 3 (empty -> .)
+    PRINT           shift and go to state 6
+    SYMBOL          shift and go to state 7
+
+    statements                     shift and go to state 1
+    statement                      shift and go to state 2
+    empty                          shift and go to state 3
+    p_statement                    shift and go to state 4
+    a_statement                    shift and go to state 5
+
+state 1
+
+    (0) S' -> statements .
+
+
+
+state 2
+
+    (1) statements -> statement . statements
+    (1) statements -> . statement statements
+    (2) statements -> . empty
+    (4) statement -> . p_statement
+    (5) statement -> . a_statement
+    (3) empty -> .
+    (6) p_statement -> . PRINT expression
+    (7) a_statement -> . SYMBOL EQUAL expression
+
+    $end            reduce using rule 3 (empty -> .)
+    PRINT           shift and go to state 6
+    SYMBOL          shift and go to state 7
+
+    statement                      shift and go to state 2
+    statements                     shift and go to state 8
+    empty                          shift and go to state 3
+    p_statement                    shift and go to state 4
+    a_statement                    shift and go to state 5
+
+state 3
+
+    (2) statements -> empty .
+
+    $end            reduce using rule 2 (statements -> empty .)
+
+
+state 4
+
+    (4) statement -> p_statement .
+
+    PRINT           reduce using rule 4 (statement -> p_statement .)
+    SYMBOL          reduce using rule 4 (statement -> p_statement .)
+    $end            reduce using rule 4 (statement -> p_statement .)
+
+
+state 5
+
+    (5) statement -> a_statement .
+
+    PRINT           reduce using rule 5 (statement -> a_statement .)
+    SYMBOL          reduce using rule 5 (statement -> a_statement .)
+    $end            reduce using rule 5 (statement -> a_statement .)
+
+
+state 6
+
+    (6) p_statement -> PRINT . expression
+    (8) expression -> . expression PLUS term
+    (9) expression -> . expression MINUS term
+    (10) expression -> . term
+    (11) term -> . term TIMES factor
+    (12) term -> . term DIVIDE factor
+    (13) term -> . factor
+    (14) factor -> . num
+    (15) factor -> . MINUS num
+    (16) factor -> . LPAREN expression RPAREN
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    MINUS           shift and go to state 11
+    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    expression                     shift and go to state 9
+    term                           shift and go to state 10
+    factor                         shift and go to state 12
+    num                            shift and go to state 13
+
+state 7
+
+    (7) a_statement -> SYMBOL . EQUAL expression
+
+    EQUAL           shift and go to state 17
+
+
+state 8
+
+    (1) statements -> statement statements .
+
+    $end            reduce using rule 1 (statements -> statement statements .)
+
+
+state 9
+
+    (6) p_statement -> PRINT expression .
+    (8) expression -> expression . PLUS term
+    (9) expression -> expression . MINUS term
+
+    PRINT           reduce using rule 6 (p_statement -> PRINT expression .)
+    SYMBOL          reduce using rule 6 (p_statement -> PRINT expression .)
+    $end            reduce using rule 6 (p_statement -> PRINT expression .)
+    PLUS            shift and go to state 18
+    MINUS           shift and go to state 19
+
+
+state 10
+
+    (10) expression -> term .
+    (11) term -> term . TIMES factor
+    (12) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 10 (expression -> term .)
+    MINUS           reduce using rule 10 (expression -> term .)
+    PRINT           reduce using rule 10 (expression -> term .)
+    SYMBOL          reduce using rule 10 (expression -> term .)
+    $end            reduce using rule 10 (expression -> term .)
+    RPAREN          reduce using rule 10 (expression -> term .)
+    TIMES           shift and go to state 20
+    DIVIDE          shift and go to state 21
+
+
+state 11
+
+    (15) factor -> MINUS . num
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    num                            shift and go to state 22
+
+state 12
+
+    (13) term -> factor .
+
+    TIMES           reduce using rule 13 (term -> factor .)
+    DIVIDE          reduce using rule 13 (term -> factor .)
+    PLUS            reduce using rule 13 (term -> factor .)
+    MINUS           reduce using rule 13 (term -> factor .)
+    PRINT           reduce using rule 13 (term -> factor .)
+    SYMBOL          reduce using rule 13 (term -> factor .)
+    $end            reduce using rule 13 (term -> factor .)
+    RPAREN          reduce using rule 13 (term -> factor .)
+
+
+state 13
+
+    (14) factor -> num .
+
+    TIMES           reduce using rule 14 (factor -> num .)
+    DIVIDE          reduce using rule 14 (factor -> num .)
+    PLUS            reduce using rule 14 (factor -> num .)
+    MINUS           reduce using rule 14 (factor -> num .)
+    PRINT           reduce using rule 14 (factor -> num .)
+    SYMBOL          reduce using rule 14 (factor -> num .)
+    $end            reduce using rule 14 (factor -> num .)
+    RPAREN          reduce using rule 14 (factor -> num .)
+
+
+state 14
+
+    (16) factor -> LPAREN . expression RPAREN
+    (8) expression -> . expression PLUS term
+    (9) expression -> . expression MINUS term
+    (10) expression -> . term
+    (11) term -> . term TIMES factor
+    (12) term -> . term DIVIDE factor
+    (13) term -> . factor
+    (14) factor -> . num
+    (15) factor -> . MINUS num
+    (16) factor -> . LPAREN expression RPAREN
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    MINUS           shift and go to state 11
+    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    expression                     shift and go to state 23
+    term                           shift and go to state 10
+    factor                         shift and go to state 12
+    num                            shift and go to state 13
+
+state 15
+
+    (17) num -> NUMBER .
+
+    TIMES           reduce using rule 17 (num -> NUMBER .)
+    DIVIDE          reduce using rule 17 (num -> NUMBER .)
+    PLUS            reduce using rule 17 (num -> NUMBER .)
+    MINUS           reduce using rule 17 (num -> NUMBER .)
+    PRINT           reduce using rule 17 (num -> NUMBER .)
+    SYMBOL          reduce using rule 17 (num -> NUMBER .)
+    $end            reduce using rule 17 (num -> NUMBER .)
+    RPAREN          reduce using rule 17 (num -> NUMBER .)
+
+
+state 16
+
+    (18) num -> SYMBOL .
+
+    TIMES           reduce using rule 18 (num -> SYMBOL .)
+    DIVIDE          reduce using rule 18 (num -> SYMBOL .)
+    PLUS            reduce using rule 18 (num -> SYMBOL .)
+    MINUS           reduce using rule 18 (num -> SYMBOL .)
+    PRINT           reduce using rule 18 (num -> SYMBOL .)
+    SYMBOL          reduce using rule 18 (num -> SYMBOL .)
+    $end            reduce using rule 18 (num -> SYMBOL .)
+    RPAREN          reduce using rule 18 (num -> SYMBOL .)
+
+
+state 17
+
+    (7) a_statement -> SYMBOL EQUAL . expression
+    (8) expression -> . expression PLUS term
+    (9) expression -> . expression MINUS term
+    (10) expression -> . term
+    (11) term -> . term TIMES factor
+    (12) term -> . term DIVIDE factor
+    (13) term -> . factor
+    (14) factor -> . num
+    (15) factor -> . MINUS num
+    (16) factor -> . LPAREN expression RPAREN
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    MINUS           shift and go to state 11
+    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    expression                     shift and go to state 24
+    term                           shift and go to state 10
+    factor                         shift and go to state 12
+    num                            shift and go to state 13
+
+state 18
+
+    (8) expression -> expression PLUS . term
+    (11) term -> . term TIMES factor
+    (12) term -> . term DIVIDE factor
+    (13) term -> . factor
+    (14) factor -> . num
+    (15) factor -> . MINUS num
+    (16) factor -> . LPAREN expression RPAREN
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    MINUS           shift and go to state 11
+    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    term                           shift and go to state 25
+    factor                         shift and go to state 12
+    num                            shift and go to state 13
+
+state 19
+
+    (9) expression -> expression MINUS . term
+    (11) term -> . term TIMES factor
+    (12) term -> . term DIVIDE factor
+    (13) term -> . factor
+    (14) factor -> . num
+    (15) factor -> . MINUS num
+    (16) factor -> . LPAREN expression RPAREN
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    MINUS           shift and go to state 11
+    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    term                           shift and go to state 26
+    factor                         shift and go to state 12
+    num                            shift and go to state 13
+
+state 20
+
+    (11) term -> term TIMES . factor
+    (14) factor -> . num
+    (15) factor -> . MINUS num
+    (16) factor -> . LPAREN expression RPAREN
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    MINUS           shift and go to state 11
+    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    factor                         shift and go to state 27
+    num                            shift and go to state 13
+
+state 21
+
+    (12) term -> term DIVIDE . factor
+    (14) factor -> . num
+    (15) factor -> . MINUS num
+    (16) factor -> . LPAREN expression RPAREN
+    (17) num -> . NUMBER
+    (18) num -> . SYMBOL
+
+    MINUS           shift and go to state 11
+    LPAREN          shift and go to state 14
+    NUMBER          shift and go to state 15
+    SYMBOL          shift and go to state 16
+
+    factor                         shift and go to state 28
+    num                            shift and go to state 13
+
+state 22
+
+    (15) factor -> MINUS num .
+
+    TIMES           reduce using rule 15 (factor -> MINUS num .)
+    DIVIDE          reduce using rule 15 (factor -> MINUS num .)
+    PLUS            reduce using rule 15 (factor -> MINUS num .)
+    MINUS           reduce using rule 15 (factor -> MINUS num .)
+    PRINT           reduce using rule 15 (factor -> MINUS num .)
+    SYMBOL          reduce using rule 15 (factor -> MINUS num .)
+    $end            reduce using rule 15 (factor -> MINUS num .)
+    RPAREN          reduce using rule 15 (factor -> MINUS num .)
+
+
+state 23
+
+    (16) factor -> LPAREN expression . RPAREN
+    (8) expression -> expression . PLUS term
+    (9) expression -> expression . MINUS term
+
+    RPAREN          shift and go to state 29
+    PLUS            shift and go to state 18
+    MINUS           shift and go to state 19
+
+
+state 24
+
+    (7) a_statement -> SYMBOL EQUAL expression .
+    (8) expression -> expression . PLUS term
+    (9) expression -> expression . MINUS term
+
+    PRINT           reduce using rule 7 (a_statement -> SYMBOL EQUAL expression .)
+    SYMBOL          reduce using rule 7 (a_statement -> SYMBOL EQUAL expression .)
+    $end            reduce using rule 7 (a_statement -> SYMBOL EQUAL expression .)
+    PLUS            shift and go to state 18
+    MINUS           shift and go to state 19
+
+
+state 25
+
+    (8) expression -> expression PLUS term .
+    (11) term -> term . TIMES factor
+    (12) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 8 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 8 (expression -> expression PLUS term .)
+    PRINT           reduce using rule 8 (expression -> expression PLUS term .)
+    SYMBOL          reduce using rule 8 (expression -> expression PLUS term .)
+    $end            reduce using rule 8 (expression -> expression PLUS term .)
+    RPAREN          reduce using rule 8 (expression -> expression PLUS term .)
+    TIMES           shift and go to state 20
+    DIVIDE          shift and go to state 21
+
+
+state 26
+
+    (9) expression -> expression MINUS term .
+    (11) term -> term . TIMES factor
+    (12) term -> term . DIVIDE factor
+
+    PLUS            reduce using rule 9 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 9 (expression -> expression MINUS term .)
+    PRINT           reduce using rule 9 (expression -> expression MINUS term .)
+    SYMBOL          reduce using rule 9 (expression -> expression MINUS term .)
+    $end            reduce using rule 9 (expression -> expression MINUS term .)
+    RPAREN          reduce using rule 9 (expression -> expression MINUS term .)
+    TIMES           shift and go to state 20
+    DIVIDE          shift and go to state 21
+
+
+state 27
+
+    (11) term -> term TIMES factor .
+
+    TIMES           reduce using rule 11 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 11 (term -> term TIMES factor .)
+    PLUS            reduce using rule 11 (term -> term TIMES factor .)
+    MINUS           reduce using rule 11 (term -> term TIMES factor .)
+    PRINT           reduce using rule 11 (term -> term TIMES factor .)
+    SYMBOL          reduce using rule 11 (term -> term TIMES factor .)
+    $end            reduce using rule 11 (term -> term TIMES factor .)
+    RPAREN          reduce using rule 11 (term -> term TIMES factor .)
+
+
+state 28
+
+    (12) term -> term DIVIDE factor .
+
+    TIMES           reduce using rule 12 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 12 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 12 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 12 (term -> term DIVIDE factor .)
+    PRINT           reduce using rule 12 (term -> term DIVIDE factor .)
+    SYMBOL          reduce using rule 12 (term -> term DIVIDE factor .)
+    $end            reduce using rule 12 (term -> term DIVIDE factor .)
+    RPAREN          reduce using rule 12 (term -> term DIVIDE factor .)
+
+
+state 29
+
+    (16) factor -> LPAREN expression RPAREN .
+
+    TIMES           reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    PRINT           reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    SYMBOL          reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    $end            reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+
