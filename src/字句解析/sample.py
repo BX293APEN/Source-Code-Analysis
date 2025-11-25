@@ -8,6 +8,7 @@ class LexicalAnalyze:
 | .set_code | code | codeの中に解析するコードの文字列を入れる |
 | .build | **kwargs | lexにオブジェクトを認識させる(ブロック構文で自動実行) |
 | .get_tokens | - | lexで字句解析をし、トークン化する |
+| .parse | - | YACCで構文解析をし、トークン化する |
     """
 
     def set_code(self,code = ""):
@@ -43,6 +44,7 @@ class LexicalAnalyze:
 
     def __init__(self, code = ""):
         self.set_code(code)
+        self.symbolTable = {}
 
         self.t_ignore       = ' \t'     # A string containing ignored characters (spaces and tabs)
         
@@ -96,54 +98,79 @@ class LexicalAnalyze:
 
     def p_statements_2(self, p):
         "statements : empty"
+        p[0] = p[1]
 
     def p_empty_1(self, p):
         "empty : "
 
     def p_statement_1(self, p):
         "statement : p_statement"
+        p[0] = p[1]
 
     def p_statement_2(self, p):
         "statement : a_statement"
+        p[0] = p[1]
 
     def p_pstatement_1(self, p):
         "p_statement : PRINT expression"
+        print(p[2])
 
     def p_astatement_1(self, p):
         "a_statement : SYMBOL EQUAL expression"
+        name = p[1]
+        value = p[3]
+        self.symbolTable[name] = value
+        p[0] = value
 
     def p_expression_1(self, p):
         "expression : expression PLUS term"
+        p[0] = p[1] + p[3]
 
     def p_expression_2(self, p):
         "expression : expression MINUS term"
+        p[0] = p[1] - p[3]
 
     def p_expression_3(self, p):
         "expression : term"
+        p[0] = p[1]
 
     def p_term_1(self, p):
         "term : term TIMES factor"
+        p[0] = p[1] * p[3]
 
     def p_term_2(self, p):
         "term : term DIVIDE factor"
+        p[0] = p[1] // p[3]
 
     def p_term_3(self, p):
         "term : factor"
+        p[0] = p[1]
+
 
     def p_factor_1(self, p):
         "factor : num"
+        p[0] = p[1]
 
     def p_factor_2(self, p):
         "factor : MINUS num"
+        p[0] = - p[2]
     
     def p_factor_3(self, p):
         "factor : LPAREN expression RPAREN"
+        p[0] = (p[2])
 
     def p_num_1(self, p):
         "num : NUMBER"
+        p[0] = p[1]
 
     def p_num_2(self, p):
         "num : SYMBOL"
+        name = p[1]
+        if name in self.symbolTable:
+            p[0] = self.symbolTable[name]
+        else:
+            print(f"undefined : {name}")
+            p[0] = 0
     
 
     def p_error(self, p):
