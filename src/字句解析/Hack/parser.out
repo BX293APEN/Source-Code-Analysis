@@ -2,18 +2,25 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    A
+    AD
+    AM
+    AMD
     AND
-    AT
-    EQUAL
-    LPAREN
+    D
+    JEQ
+    JGE
+    JGT
+    JLE
+    JLT
+    JMP
+    JNE
+    M
+    MD
     MINUS
     NOT
-    NUMBER
     OR
     PLUS
-    RPAREN
-    SEMI
-    SYMBOL
 
 Grammar
 
@@ -24,29 +31,372 @@ Rule 3     empty -> <empty>
 Rule 4     statement -> p_instruction
 Rule 5     statement -> a_instruction
 Rule 6     statement -> l_instruction
+Rule 7     a_instruction -> AT NUMBER
+Rule 8     a_instruction -> AT SYMBOL
+Rule 9     l_instruction -> LPAREN SYMBOL RPAREN
+Rule 10    p_instruction -> dest EQUAL comp SEMI jump
+Rule 11    p_instruction -> dest EQUAL comp
+Rule 12    p_instruction -> comp SEMI jump
+Rule 13    p_instruction -> comp
+Rule 14    dest -> SYMBOL
+Rule 15    comp -> SYMBOL
+Rule 16    comp -> NUMBER
+Rule 17    jump -> SYMBOL
 
 Terminals, with rules where they appear
 
+A                    : 
+AD                   : 
+AM                   : 
+AMD                  : 
 AND                  : 
-AT                   : 
-EQUAL                : 
-LPAREN               : 
+AT                   : 7 8
+D                    : 
+EQUAL                : 10 11
+JEQ                  : 
+JGE                  : 
+JGT                  : 
+JLE                  : 
+JLT                  : 
+JMP                  : 
+JNE                  : 
+LPAREN               : 9
+M                    : 
+MD                   : 
 MINUS                : 
 NOT                  : 
-NUMBER               : 
+NUMBER               : 7 16
 OR                   : 
 PLUS                 : 
-RPAREN               : 
-SEMI                 : 
-SYMBOL               : 
+RPAREN               : 9
+SEMI                 : 10 12
+SYMBOL               : 8 9 14 15 17
 error                : 
 
 Nonterminals, with rules where they appear
 
 a_instruction        : 5
+comp                 : 10 11 12 13
+dest                 : 10 11
 empty                : 2
+jump                 : 10 12
 l_instruction        : 6
 p_instruction        : 4
 statement            : 1
 statements           : 1 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statements
+    (1) statements -> . statement statements
+    (2) statements -> . empty
+    (4) statement -> . p_instruction
+    (5) statement -> . a_instruction
+    (6) statement -> . l_instruction
+    (3) empty -> .
+    (10) p_instruction -> . dest EQUAL comp SEMI jump
+    (11) p_instruction -> . dest EQUAL comp
+    (12) p_instruction -> . comp SEMI jump
+    (13) p_instruction -> . comp
+    (7) a_instruction -> . AT NUMBER
+    (8) a_instruction -> . AT SYMBOL
+    (9) l_instruction -> . LPAREN SYMBOL RPAREN
+    (14) dest -> . SYMBOL
+    (15) comp -> . SYMBOL
+    (16) comp -> . NUMBER
+
+    $end            reduce using rule 3 (empty -> .)
+    AT              shift and go to state 9
+    LPAREN          shift and go to state 12
+    SYMBOL          shift and go to state 11
+    NUMBER          shift and go to state 10
+
+    statements                     shift and go to state 1
+    statement                      shift and go to state 2
+    empty                          shift and go to state 3
+    p_instruction                  shift and go to state 4
+    a_instruction                  shift and go to state 5
+    l_instruction                  shift and go to state 6
+    dest                           shift and go to state 7
+    comp                           shift and go to state 8
+
+state 1
+
+    (0) S' -> statements .
+
+
+
+state 2
+
+    (1) statements -> statement . statements
+    (1) statements -> . statement statements
+    (2) statements -> . empty
+    (4) statement -> . p_instruction
+    (5) statement -> . a_instruction
+    (6) statement -> . l_instruction
+    (3) empty -> .
+    (10) p_instruction -> . dest EQUAL comp SEMI jump
+    (11) p_instruction -> . dest EQUAL comp
+    (12) p_instruction -> . comp SEMI jump
+    (13) p_instruction -> . comp
+    (7) a_instruction -> . AT NUMBER
+    (8) a_instruction -> . AT SYMBOL
+    (9) l_instruction -> . LPAREN SYMBOL RPAREN
+    (14) dest -> . SYMBOL
+    (15) comp -> . SYMBOL
+    (16) comp -> . NUMBER
+
+    $end            reduce using rule 3 (empty -> .)
+    AT              shift and go to state 9
+    LPAREN          shift and go to state 12
+    SYMBOL          shift and go to state 11
+    NUMBER          shift and go to state 10
+
+    statement                      shift and go to state 2
+    statements                     shift and go to state 13
+    empty                          shift and go to state 3
+    p_instruction                  shift and go to state 4
+    a_instruction                  shift and go to state 5
+    l_instruction                  shift and go to state 6
+    dest                           shift and go to state 7
+    comp                           shift and go to state 8
+
+state 3
+
+    (2) statements -> empty .
+
+    $end            reduce using rule 2 (statements -> empty .)
+
+
+state 4
+
+    (4) statement -> p_instruction .
+
+    AT              reduce using rule 4 (statement -> p_instruction .)
+    LPAREN          reduce using rule 4 (statement -> p_instruction .)
+    SYMBOL          reduce using rule 4 (statement -> p_instruction .)
+    NUMBER          reduce using rule 4 (statement -> p_instruction .)
+    $end            reduce using rule 4 (statement -> p_instruction .)
+
+
+state 5
+
+    (5) statement -> a_instruction .
+
+    AT              reduce using rule 5 (statement -> a_instruction .)
+    LPAREN          reduce using rule 5 (statement -> a_instruction .)
+    SYMBOL          reduce using rule 5 (statement -> a_instruction .)
+    NUMBER          reduce using rule 5 (statement -> a_instruction .)
+    $end            reduce using rule 5 (statement -> a_instruction .)
+
+
+state 6
+
+    (6) statement -> l_instruction .
+
+    AT              reduce using rule 6 (statement -> l_instruction .)
+    LPAREN          reduce using rule 6 (statement -> l_instruction .)
+    SYMBOL          reduce using rule 6 (statement -> l_instruction .)
+    NUMBER          reduce using rule 6 (statement -> l_instruction .)
+    $end            reduce using rule 6 (statement -> l_instruction .)
+
+
+state 7
+
+    (10) p_instruction -> dest . EQUAL comp SEMI jump
+    (11) p_instruction -> dest . EQUAL comp
+
+    EQUAL           shift and go to state 14
+
+
+state 8
+
+    (12) p_instruction -> comp . SEMI jump
+    (13) p_instruction -> comp .
+
+    SEMI            shift and go to state 15
+    AT              reduce using rule 13 (p_instruction -> comp .)
+    LPAREN          reduce using rule 13 (p_instruction -> comp .)
+    SYMBOL          reduce using rule 13 (p_instruction -> comp .)
+    NUMBER          reduce using rule 13 (p_instruction -> comp .)
+    $end            reduce using rule 13 (p_instruction -> comp .)
+
+
+state 9
+
+    (7) a_instruction -> AT . NUMBER
+    (8) a_instruction -> AT . SYMBOL
+
+    NUMBER          shift and go to state 16
+    SYMBOL          shift and go to state 17
+
+
+state 10
+
+    (16) comp -> NUMBER .
+
+    SEMI            reduce using rule 16 (comp -> NUMBER .)
+    AT              reduce using rule 16 (comp -> NUMBER .)
+    LPAREN          reduce using rule 16 (comp -> NUMBER .)
+    SYMBOL          reduce using rule 16 (comp -> NUMBER .)
+    NUMBER          reduce using rule 16 (comp -> NUMBER .)
+    $end            reduce using rule 16 (comp -> NUMBER .)
+
+
+state 11
+
+    (14) dest -> SYMBOL .
+    (15) comp -> SYMBOL .
+
+    EQUAL           reduce using rule 14 (dest -> SYMBOL .)
+    SEMI            reduce using rule 15 (comp -> SYMBOL .)
+    AT              reduce using rule 15 (comp -> SYMBOL .)
+    LPAREN          reduce using rule 15 (comp -> SYMBOL .)
+    SYMBOL          reduce using rule 15 (comp -> SYMBOL .)
+    NUMBER          reduce using rule 15 (comp -> SYMBOL .)
+    $end            reduce using rule 15 (comp -> SYMBOL .)
+
+
+state 12
+
+    (9) l_instruction -> LPAREN . SYMBOL RPAREN
+
+    SYMBOL          shift and go to state 18
+
+
+state 13
+
+    (1) statements -> statement statements .
+
+    $end            reduce using rule 1 (statements -> statement statements .)
+
+
+state 14
+
+    (10) p_instruction -> dest EQUAL . comp SEMI jump
+    (11) p_instruction -> dest EQUAL . comp
+    (15) comp -> . SYMBOL
+    (16) comp -> . NUMBER
+
+    SYMBOL          shift and go to state 20
+    NUMBER          shift and go to state 10
+
+    comp                           shift and go to state 19
+
+state 15
+
+    (12) p_instruction -> comp SEMI . jump
+    (17) jump -> . SYMBOL
+
+    SYMBOL          shift and go to state 22
+
+    jump                           shift and go to state 21
+
+state 16
+
+    (7) a_instruction -> AT NUMBER .
+
+    AT              reduce using rule 7 (a_instruction -> AT NUMBER .)
+    LPAREN          reduce using rule 7 (a_instruction -> AT NUMBER .)
+    SYMBOL          reduce using rule 7 (a_instruction -> AT NUMBER .)
+    NUMBER          reduce using rule 7 (a_instruction -> AT NUMBER .)
+    $end            reduce using rule 7 (a_instruction -> AT NUMBER .)
+
+
+state 17
+
+    (8) a_instruction -> AT SYMBOL .
+
+    AT              reduce using rule 8 (a_instruction -> AT SYMBOL .)
+    LPAREN          reduce using rule 8 (a_instruction -> AT SYMBOL .)
+    SYMBOL          reduce using rule 8 (a_instruction -> AT SYMBOL .)
+    NUMBER          reduce using rule 8 (a_instruction -> AT SYMBOL .)
+    $end            reduce using rule 8 (a_instruction -> AT SYMBOL .)
+
+
+state 18
+
+    (9) l_instruction -> LPAREN SYMBOL . RPAREN
+
+    RPAREN          shift and go to state 23
+
+
+state 19
+
+    (10) p_instruction -> dest EQUAL comp . SEMI jump
+    (11) p_instruction -> dest EQUAL comp .
+
+    SEMI            shift and go to state 24
+    AT              reduce using rule 11 (p_instruction -> dest EQUAL comp .)
+    LPAREN          reduce using rule 11 (p_instruction -> dest EQUAL comp .)
+    SYMBOL          reduce using rule 11 (p_instruction -> dest EQUAL comp .)
+    NUMBER          reduce using rule 11 (p_instruction -> dest EQUAL comp .)
+    $end            reduce using rule 11 (p_instruction -> dest EQUAL comp .)
+
+
+state 20
+
+    (15) comp -> SYMBOL .
+
+    SEMI            reduce using rule 15 (comp -> SYMBOL .)
+    AT              reduce using rule 15 (comp -> SYMBOL .)
+    LPAREN          reduce using rule 15 (comp -> SYMBOL .)
+    SYMBOL          reduce using rule 15 (comp -> SYMBOL .)
+    NUMBER          reduce using rule 15 (comp -> SYMBOL .)
+    $end            reduce using rule 15 (comp -> SYMBOL .)
+
+
+state 21
+
+    (12) p_instruction -> comp SEMI jump .
+
+    AT              reduce using rule 12 (p_instruction -> comp SEMI jump .)
+    LPAREN          reduce using rule 12 (p_instruction -> comp SEMI jump .)
+    SYMBOL          reduce using rule 12 (p_instruction -> comp SEMI jump .)
+    NUMBER          reduce using rule 12 (p_instruction -> comp SEMI jump .)
+    $end            reduce using rule 12 (p_instruction -> comp SEMI jump .)
+
+
+state 22
+
+    (17) jump -> SYMBOL .
+
+    AT              reduce using rule 17 (jump -> SYMBOL .)
+    LPAREN          reduce using rule 17 (jump -> SYMBOL .)
+    SYMBOL          reduce using rule 17 (jump -> SYMBOL .)
+    NUMBER          reduce using rule 17 (jump -> SYMBOL .)
+    $end            reduce using rule 17 (jump -> SYMBOL .)
+
+
+state 23
+
+    (9) l_instruction -> LPAREN SYMBOL RPAREN .
+
+    AT              reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    LPAREN          reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    SYMBOL          reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    NUMBER          reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    $end            reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+
+
+state 24
+
+    (10) p_instruction -> dest EQUAL comp SEMI . jump
+    (17) jump -> . SYMBOL
+
+    SYMBOL          shift and go to state 22
+
+    jump                           shift and go to state 25
+
+state 25
+
+    (10) p_instruction -> dest EQUAL comp SEMI jump .
+
+    AT              reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
+    LPAREN          reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
+    SYMBOL          reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
+    NUMBER          reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
+    $end            reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
 
