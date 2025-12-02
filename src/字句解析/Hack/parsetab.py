@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'A AD AM AMD AND AT D EQUAL JEQ JGE JGT JLE JLT JMP JNE LPAREN M MD MINUS NOT NUMBER OR PLUS RPAREN SEMI SYMBOLstatements : statement statementsstatements : emptyempty : statement : p_instructionstatement : a_instructionstatement : l_instruction\na_instruction : AT NUMBER\n\na_instruction : AT SYMBOL\n\nl_instruction : LPAREN SYMBOL RPAREN\np_instruction : dest EQUAL comp SEMI jumpp_instruction : dest EQUAL compp_instruction : comp SEMI jumpp_instruction : comp\ndest : SYMBOL\n\ncomp : SYMBOL\n\ncomp : NUMBER\n\njump : SYMBOL\n'
+_lr_signature = 'A AD AM AMD AND AT D EQUAL JEQ JGE JGT JLE JLT JMP JNE LPAREN M MD MINUS NOT NUMBER OR PLUS RPAREN SEMI SYMBOL\nstatements  : statement statements\n            | empty\nempty : statement  : a_instructionstatement  : l_instructionstatement  : c_instruction\na_instruction   : AT SYMBOL\n                | AT NUMBER\n\nl_instruction : LPAREN SYMBOL RPAREN\n\nc_instruction   : dest EQUAL comp SEMI jump\n                | comp SEMI jump\n                | dest EQUAL comp\n                | comp\n\n\ndest    : AMD\n        | AD\n        | AM\n        | MD \n        | A\n        | M\n        | D\n\ncomp        : registers\n            | registerNum\n            | registerFunc\n            | register\n            | num\n\nregisters       : register PLUS register\n                | register MINUS register\n                | register AND register\n                | register OR register\n\nregisterFunc    : NOT register\n                | MINUS register\n\nregisterNum     : register PLUS num\n                | register MINUS num\n\nnum : NUMBER\n\nnum        : MINUS NUMBER\n\nregister    : A\n            | M\n            | D\n\njump    : JGT\n        | JEQ\n        | JGE\n        | JLT\n        | JNE\n        | JLE\n        | JMP\n'
     
-_lr_action_items = {'$end':([0,1,2,3,4,5,6,8,10,11,13,16,17,19,20,21,22,23,25,],[-3,0,-3,-2,-4,-5,-6,-13,-16,-15,-1,-7,-8,-11,-15,-12,-17,-9,-10,]),'AT':([0,2,4,5,6,8,10,11,16,17,19,20,21,22,23,25,],[9,9,-4,-5,-6,-13,-16,-15,-7,-8,-11,-15,-12,-17,-9,-10,]),'LPAREN':([0,2,4,5,6,8,10,11,16,17,19,20,21,22,23,25,],[12,12,-4,-5,-6,-13,-16,-15,-7,-8,-11,-15,-12,-17,-9,-10,]),'SYMBOL':([0,2,4,5,6,8,9,10,11,12,14,15,16,17,19,20,21,22,23,24,25,],[11,11,-4,-5,-6,-13,17,-16,-15,18,20,22,-7,-8,-11,-15,-12,-17,-9,22,-10,]),'NUMBER':([0,2,4,5,6,8,9,10,11,14,16,17,19,20,21,22,23,25,],[10,10,-4,-5,-6,-13,16,-16,-15,10,-7,-8,-11,-15,-12,-17,-9,-10,]),'EQUAL':([7,11,],[14,-14,]),'SEMI':([8,10,11,19,20,],[15,-16,-15,24,-15,]),'RPAREN':([18,],[23,]),}
+_lr_action_items = {'$end':([0,1,2,3,4,5,6,8,11,16,17,18,19,20,21,22,23,26,27,28,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[-3,0,-3,-2,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-1,-7,-8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'AT':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[7,7,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-7,-8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'LPAREN':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[9,9,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-7,-8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'AMD':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[12,12,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-7,-8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'AD':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[13,13,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-7,-8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'AM':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[14,14,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-7,-8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'MD':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[15,15,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-7,-8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'A':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,24,25,27,28,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[16,16,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,38,38,-7,-8,38,38,38,38,38,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'M':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,24,25,27,28,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[17,17,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,39,39,-7,-8,39,39,39,39,39,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'D':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,24,25,27,28,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[18,18,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,40,40,-7,-8,40,40,40,40,40,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'NOT':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,30,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[25,25,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,-7,-8,25,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'MINUS':([0,2,4,5,6,8,11,16,17,18,19,20,21,22,23,27,28,30,32,33,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,60,],[24,24,-4,-5,-6,-34,-13,-36,-37,-38,-21,-22,-23,33,-25,-7,-8,24,54,54,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,-27,-33,-28,-29,-10,]),'NUMBER':([0,2,4,5,6,7,8,11,16,17,18,19,20,21,22,23,24,27,28,30,32,33,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,60,],[8,8,-4,-5,-6,28,-34,-13,-36,-37,-38,-21,-22,-23,-24,-25,37,-7,-8,8,8,8,-31,-35,-36,-37,-38,-30,-9,-12,-11,-39,-40,-41,-42,-43,-44,-45,-26,-32,37,-27,-33,-28,-29,-10,]),'SYMBOL':([7,9,],[27,29,]),'SEMI':([8,11,16,17,18,19,20,21,22,23,36,37,38,39,40,41,43,52,53,55,56,57,58,],[-34,31,-36,-37,-38,-21,-22,-23,-24,-25,-31,-35,-36,-37,-38,-30,59,-26,-32,-27,-33,-28,-29,]),'EQUAL':([10,12,13,14,15,16,17,18,],[30,-14,-15,-16,-17,-18,-19,-20,]),'PLUS':([16,17,18,22,38,39,40,],[-36,-37,-38,32,-36,-37,-38,]),'AND':([16,17,18,22,38,39,40,],[-36,-37,-38,34,-36,-37,-38,]),'OR':([16,17,18,22,38,39,40,],[-36,-37,-38,35,-36,-37,-38,]),'RPAREN':([29,],[42,]),'JGT':([31,59,],[45,45,]),'JEQ':([31,59,],[46,46,]),'JGE':([31,59,],[47,47,]),'JLT':([31,59,],[48,48,]),'JNE':([31,59,],[49,49,]),'JLE':([31,59,],[50,50,]),'JMP':([31,59,],[51,51,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statements':([0,2,],[1,13,]),'statement':([0,2,],[2,2,]),'empty':([0,2,],[3,3,]),'p_instruction':([0,2,],[4,4,]),'a_instruction':([0,2,],[5,5,]),'l_instruction':([0,2,],[6,6,]),'dest':([0,2,],[7,7,]),'comp':([0,2,14,],[8,8,19,]),'jump':([15,24,],[21,25,]),}
+_lr_goto_items = {'statements':([0,2,],[1,26,]),'statement':([0,2,],[2,2,]),'empty':([0,2,],[3,3,]),'a_instruction':([0,2,],[4,4,]),'l_instruction':([0,2,],[5,5,]),'c_instruction':([0,2,],[6,6,]),'dest':([0,2,],[10,10,]),'comp':([0,2,30,],[11,11,43,]),'registers':([0,2,30,],[19,19,19,]),'registerNum':([0,2,30,],[20,20,20,]),'registerFunc':([0,2,30,],[21,21,21,]),'register':([0,2,24,25,30,32,33,34,35,],[22,22,36,41,22,52,55,57,58,]),'num':([0,2,30,32,33,],[23,23,23,53,56,]),'jump':([31,59,],[44,60,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,21 +27,49 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statements","S'",1,None,None,None),
-  ('statements -> statement statements','statements',2,'p_statements_1','asm.py',139),
-  ('statements -> empty','statements',1,'p_statements_2','asm.py',142),
-  ('empty -> <empty>','empty',0,'p_empty_1','asm.py',146),
-  ('statement -> p_instruction','statement',1,'p_statement_1','asm.py',149),
-  ('statement -> a_instruction','statement',1,'p_statement_2','asm.py',153),
-  ('statement -> l_instruction','statement',1,'p_statement_3','asm.py',157),
-  ('a_instruction -> AT NUMBER','a_instruction',2,'p_a_instruction_1','asm.py',163),
-  ('a_instruction -> AT SYMBOL','a_instruction',2,'p_a_instruction_2','asm.py',169),
-  ('l_instruction -> LPAREN SYMBOL RPAREN','l_instruction',3,'p_l_instruction','asm.py',176),
-  ('p_instruction -> dest EQUAL comp SEMI jump','p_instruction',5,'p_p_instruction_1','asm.py',184),
-  ('p_instruction -> dest EQUAL comp','p_instruction',3,'p_p_instruction_2','asm.py',189),
-  ('p_instruction -> comp SEMI jump','p_instruction',3,'p_p_instruction_3','asm.py',194),
-  ('p_instruction -> comp','p_instruction',1,'p_p_instruction_4','asm.py',199),
-  ('dest -> SYMBOL','dest',1,'p_dest','asm.py',205),
-  ('comp -> SYMBOL','comp',1,'p_comp_1','asm.py',211),
-  ('comp -> NUMBER','comp',1,'p_comp_2','asm.py',217),
-  ('jump -> SYMBOL','jump',1,'p_jump','asm.py',224),
+  ('statements -> statement statements','statements',2,'p_statements','asm.py',149),
+  ('statements -> empty','statements',1,'p_statements','asm.py',150),
+  ('empty -> <empty>','empty',0,'p_empty','asm.py',158),
+  ('statement -> a_instruction','statement',1,'p_statement_a','asm.py',161),
+  ('statement -> l_instruction','statement',1,'p_statement_l','asm.py',169),
+  ('statement -> c_instruction','statement',1,'p_statement_c','asm.py',175),
+  ('a_instruction -> AT SYMBOL','a_instruction',2,'p_a_instruction','asm.py',193),
+  ('a_instruction -> AT NUMBER','a_instruction',2,'p_a_instruction','asm.py',194),
+  ('l_instruction -> LPAREN SYMBOL RPAREN','l_instruction',3,'p_l_instruction','asm.py',215),
+  ('c_instruction -> dest EQUAL comp SEMI jump','c_instruction',5,'p_c_instruction_1','asm.py',226),
+  ('c_instruction -> comp SEMI jump','c_instruction',3,'p_c_instruction_1','asm.py',227),
+  ('c_instruction -> dest EQUAL comp','c_instruction',3,'p_c_instruction_1','asm.py',228),
+  ('c_instruction -> comp','c_instruction',1,'p_c_instruction_1','asm.py',229),
+  ('dest -> AMD','dest',1,'p_dest','asm.py',272),
+  ('dest -> AD','dest',1,'p_dest','asm.py',273),
+  ('dest -> AM','dest',1,'p_dest','asm.py',274),
+  ('dest -> MD','dest',1,'p_dest','asm.py',275),
+  ('dest -> A','dest',1,'p_dest','asm.py',276),
+  ('dest -> M','dest',1,'p_dest','asm.py',277),
+  ('dest -> D','dest',1,'p_dest','asm.py',278),
+  ('comp -> registers','comp',1,'p_comp','asm.py',284),
+  ('comp -> registerNum','comp',1,'p_comp','asm.py',285),
+  ('comp -> registerFunc','comp',1,'p_comp','asm.py',286),
+  ('comp -> register','comp',1,'p_comp','asm.py',287),
+  ('comp -> num','comp',1,'p_comp','asm.py',288),
+  ('registers -> register PLUS register','registers',3,'p_registers','asm.py',294),
+  ('registers -> register MINUS register','registers',3,'p_registers','asm.py',295),
+  ('registers -> register AND register','registers',3,'p_registers','asm.py',296),
+  ('registers -> register OR register','registers',3,'p_registers','asm.py',297),
+  ('registerFunc -> NOT register','registerFunc',2,'p_register_func','asm.py',304),
+  ('registerFunc -> MINUS register','registerFunc',2,'p_register_func','asm.py',305),
+  ('registerNum -> register PLUS num','registerNum',3,'p_register_num','asm.py',312),
+  ('registerNum -> register MINUS num','registerNum',3,'p_register_num','asm.py',313),
+  ('num -> NUMBER','num',1,'p_num','asm.py',320),
+  ('num -> MINUS NUMBER','num',2,'p_minus_num','asm.py',330),
+  ('register -> A','register',1,'p_register','asm.py',343),
+  ('register -> M','register',1,'p_register','asm.py',344),
+  ('register -> D','register',1,'p_register','asm.py',345),
+  ('jump -> JGT','jump',1,'p_jump','asm.py',352),
+  ('jump -> JEQ','jump',1,'p_jump','asm.py',353),
+  ('jump -> JGE','jump',1,'p_jump','asm.py',354),
+  ('jump -> JLT','jump',1,'p_jump','asm.py',355),
+  ('jump -> JNE','jump',1,'p_jump','asm.py',356),
+  ('jump -> JLE','jump',1,'p_jump','asm.py',357),
+  ('jump -> JMP','jump',1,'p_jump','asm.py',358),
 ]

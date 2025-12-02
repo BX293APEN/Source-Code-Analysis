@@ -1,87 +1,98 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    A
-    AD
-    AM
-    AMD
-    AND
-    D
-    JEQ
-    JGE
-    JGT
-    JLE
-    JLT
-    JMP
-    JNE
-    M
-    MD
-    MINUS
-    NOT
-    OR
-    PLUS
-
 Grammar
 
 Rule 0     S' -> statements
 Rule 1     statements -> statement statements
 Rule 2     statements -> empty
 Rule 3     empty -> <empty>
-Rule 4     statement -> p_instruction
-Rule 5     statement -> a_instruction
-Rule 6     statement -> l_instruction
-Rule 7     a_instruction -> AT NUMBER
-Rule 8     a_instruction -> AT SYMBOL
+Rule 4     statement -> a_instruction
+Rule 5     statement -> l_instruction
+Rule 6     statement -> c_instruction
+Rule 7     a_instruction -> AT SYMBOL
+Rule 8     a_instruction -> AT NUMBER
 Rule 9     l_instruction -> LPAREN SYMBOL RPAREN
-Rule 10    p_instruction -> dest EQUAL comp SEMI jump
-Rule 11    p_instruction -> dest EQUAL comp
-Rule 12    p_instruction -> comp SEMI jump
-Rule 13    p_instruction -> comp
-Rule 14    dest -> SYMBOL
-Rule 15    comp -> SYMBOL
-Rule 16    comp -> NUMBER
-Rule 17    jump -> SYMBOL
+Rule 10    c_instruction -> dest EQUAL comp SEMI jump
+Rule 11    c_instruction -> comp SEMI jump
+Rule 12    c_instruction -> dest EQUAL comp
+Rule 13    c_instruction -> comp
+Rule 14    dest -> AMD
+Rule 15    dest -> AD
+Rule 16    dest -> AM
+Rule 17    dest -> MD
+Rule 18    dest -> A
+Rule 19    dest -> M
+Rule 20    dest -> D
+Rule 21    comp -> registers
+Rule 22    comp -> registerNum
+Rule 23    comp -> registerFunc
+Rule 24    comp -> register
+Rule 25    comp -> num
+Rule 26    registers -> register PLUS register
+Rule 27    registers -> register MINUS register
+Rule 28    registers -> register AND register
+Rule 29    registers -> register OR register
+Rule 30    registerFunc -> NOT register
+Rule 31    registerFunc -> MINUS register
+Rule 32    registerNum -> register PLUS num
+Rule 33    registerNum -> register MINUS num
+Rule 34    num -> NUMBER
+Rule 35    num -> MINUS NUMBER
+Rule 36    register -> A
+Rule 37    register -> M
+Rule 38    register -> D
+Rule 39    jump -> JGT
+Rule 40    jump -> JEQ
+Rule 41    jump -> JGE
+Rule 42    jump -> JLT
+Rule 43    jump -> JNE
+Rule 44    jump -> JLE
+Rule 45    jump -> JMP
 
 Terminals, with rules where they appear
 
-A                    : 
-AD                   : 
-AM                   : 
-AMD                  : 
-AND                  : 
+A                    : 18 36
+AD                   : 15
+AM                   : 16
+AMD                  : 14
+AND                  : 28
 AT                   : 7 8
-D                    : 
-EQUAL                : 10 11
-JEQ                  : 
-JGE                  : 
-JGT                  : 
-JLE                  : 
-JLT                  : 
-JMP                  : 
-JNE                  : 
+D                    : 20 38
+EQUAL                : 10 12
+JEQ                  : 40
+JGE                  : 41
+JGT                  : 39
+JLE                  : 44
+JLT                  : 42
+JMP                  : 45
+JNE                  : 43
 LPAREN               : 9
-M                    : 
-MD                   : 
-MINUS                : 
-NOT                  : 
-NUMBER               : 7 16
-OR                   : 
-PLUS                 : 
+M                    : 19 37
+MD                   : 17
+MINUS                : 27 31 33 35
+NOT                  : 30
+NUMBER               : 8 34 35
+OR                   : 29
+PLUS                 : 26 32
 RPAREN               : 9
-SEMI                 : 10 12
-SYMBOL               : 8 9 14 15 17
+SEMI                 : 10 11
+SYMBOL               : 7 9
 error                : 
 
 Nonterminals, with rules where they appear
 
-a_instruction        : 5
+a_instruction        : 4
+c_instruction        : 6
 comp                 : 10 11 12 13
-dest                 : 10 11
+dest                 : 10 12
 empty                : 2
-jump                 : 10 12
-l_instruction        : 6
-p_instruction        : 4
+jump                 : 10 11
+l_instruction        : 5
+num                  : 25 32 33
+register             : 24 26 26 27 27 28 28 29 29 30 31 32 33
+registerFunc         : 23
+registerNum          : 22
+registers            : 21
 statement            : 1
 statements           : 1 0
 
@@ -92,35 +103,70 @@ state 0
     (0) S' -> . statements
     (1) statements -> . statement statements
     (2) statements -> . empty
-    (4) statement -> . p_instruction
-    (5) statement -> . a_instruction
-    (6) statement -> . l_instruction
+    (4) statement -> . a_instruction
+    (5) statement -> . l_instruction
+    (6) statement -> . c_instruction
     (3) empty -> .
-    (10) p_instruction -> . dest EQUAL comp SEMI jump
-    (11) p_instruction -> . dest EQUAL comp
-    (12) p_instruction -> . comp SEMI jump
-    (13) p_instruction -> . comp
-    (7) a_instruction -> . AT NUMBER
-    (8) a_instruction -> . AT SYMBOL
+    (7) a_instruction -> . AT SYMBOL
+    (8) a_instruction -> . AT NUMBER
     (9) l_instruction -> . LPAREN SYMBOL RPAREN
-    (14) dest -> . SYMBOL
-    (15) comp -> . SYMBOL
-    (16) comp -> . NUMBER
+    (10) c_instruction -> . dest EQUAL comp SEMI jump
+    (11) c_instruction -> . comp SEMI jump
+    (12) c_instruction -> . dest EQUAL comp
+    (13) c_instruction -> . comp
+    (14) dest -> . AMD
+    (15) dest -> . AD
+    (16) dest -> . AM
+    (17) dest -> . MD
+    (18) dest -> . A
+    (19) dest -> . M
+    (20) dest -> . D
+    (21) comp -> . registers
+    (22) comp -> . registerNum
+    (23) comp -> . registerFunc
+    (24) comp -> . register
+    (25) comp -> . num
+    (26) registers -> . register PLUS register
+    (27) registers -> . register MINUS register
+    (28) registers -> . register AND register
+    (29) registers -> . register OR register
+    (32) registerNum -> . register PLUS num
+    (33) registerNum -> . register MINUS num
+    (30) registerFunc -> . NOT register
+    (31) registerFunc -> . MINUS register
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+    (34) num -> . NUMBER
+    (35) num -> . MINUS NUMBER
 
     $end            reduce using rule 3 (empty -> .)
-    AT              shift and go to state 9
-    LPAREN          shift and go to state 12
-    SYMBOL          shift and go to state 11
-    NUMBER          shift and go to state 10
+    AT              shift and go to state 7
+    LPAREN          shift and go to state 9
+    AMD             shift and go to state 12
+    AD              shift and go to state 13
+    AM              shift and go to state 14
+    MD              shift and go to state 15
+    A               shift and go to state 16
+    M               shift and go to state 17
+    D               shift and go to state 18
+    NOT             shift and go to state 25
+    MINUS           shift and go to state 24
+    NUMBER          shift and go to state 8
 
     statements                     shift and go to state 1
     statement                      shift and go to state 2
     empty                          shift and go to state 3
-    p_instruction                  shift and go to state 4
-    a_instruction                  shift and go to state 5
-    l_instruction                  shift and go to state 6
-    dest                           shift and go to state 7
-    comp                           shift and go to state 8
+    a_instruction                  shift and go to state 4
+    l_instruction                  shift and go to state 5
+    c_instruction                  shift and go to state 6
+    dest                           shift and go to state 10
+    comp                           shift and go to state 11
+    registers                      shift and go to state 19
+    registerNum                    shift and go to state 20
+    registerFunc                   shift and go to state 21
+    register                       shift and go to state 22
+    num                            shift and go to state 23
 
 state 1
 
@@ -133,35 +179,70 @@ state 2
     (1) statements -> statement . statements
     (1) statements -> . statement statements
     (2) statements -> . empty
-    (4) statement -> . p_instruction
-    (5) statement -> . a_instruction
-    (6) statement -> . l_instruction
+    (4) statement -> . a_instruction
+    (5) statement -> . l_instruction
+    (6) statement -> . c_instruction
     (3) empty -> .
-    (10) p_instruction -> . dest EQUAL comp SEMI jump
-    (11) p_instruction -> . dest EQUAL comp
-    (12) p_instruction -> . comp SEMI jump
-    (13) p_instruction -> . comp
-    (7) a_instruction -> . AT NUMBER
-    (8) a_instruction -> . AT SYMBOL
+    (7) a_instruction -> . AT SYMBOL
+    (8) a_instruction -> . AT NUMBER
     (9) l_instruction -> . LPAREN SYMBOL RPAREN
-    (14) dest -> . SYMBOL
-    (15) comp -> . SYMBOL
-    (16) comp -> . NUMBER
+    (10) c_instruction -> . dest EQUAL comp SEMI jump
+    (11) c_instruction -> . comp SEMI jump
+    (12) c_instruction -> . dest EQUAL comp
+    (13) c_instruction -> . comp
+    (14) dest -> . AMD
+    (15) dest -> . AD
+    (16) dest -> . AM
+    (17) dest -> . MD
+    (18) dest -> . A
+    (19) dest -> . M
+    (20) dest -> . D
+    (21) comp -> . registers
+    (22) comp -> . registerNum
+    (23) comp -> . registerFunc
+    (24) comp -> . register
+    (25) comp -> . num
+    (26) registers -> . register PLUS register
+    (27) registers -> . register MINUS register
+    (28) registers -> . register AND register
+    (29) registers -> . register OR register
+    (32) registerNum -> . register PLUS num
+    (33) registerNum -> . register MINUS num
+    (30) registerFunc -> . NOT register
+    (31) registerFunc -> . MINUS register
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+    (34) num -> . NUMBER
+    (35) num -> . MINUS NUMBER
 
     $end            reduce using rule 3 (empty -> .)
-    AT              shift and go to state 9
-    LPAREN          shift and go to state 12
-    SYMBOL          shift and go to state 11
-    NUMBER          shift and go to state 10
+    AT              shift and go to state 7
+    LPAREN          shift and go to state 9
+    AMD             shift and go to state 12
+    AD              shift and go to state 13
+    AM              shift and go to state 14
+    MD              shift and go to state 15
+    A               shift and go to state 16
+    M               shift and go to state 17
+    D               shift and go to state 18
+    NOT             shift and go to state 25
+    MINUS           shift and go to state 24
+    NUMBER          shift and go to state 8
 
     statement                      shift and go to state 2
-    statements                     shift and go to state 13
+    statements                     shift and go to state 26
     empty                          shift and go to state 3
-    p_instruction                  shift and go to state 4
-    a_instruction                  shift and go to state 5
-    l_instruction                  shift and go to state 6
-    dest                           shift and go to state 7
-    comp                           shift and go to state 8
+    a_instruction                  shift and go to state 4
+    l_instruction                  shift and go to state 5
+    c_instruction                  shift and go to state 6
+    dest                           shift and go to state 10
+    comp                           shift and go to state 11
+    registers                      shift and go to state 19
+    registerNum                    shift and go to state 20
+    registerFunc                   shift and go to state 21
+    register                       shift and go to state 22
+    num                            shift and go to state 23
 
 state 3
 
@@ -172,231 +253,1031 @@ state 3
 
 state 4
 
-    (4) statement -> p_instruction .
+    (4) statement -> a_instruction .
 
-    AT              reduce using rule 4 (statement -> p_instruction .)
-    LPAREN          reduce using rule 4 (statement -> p_instruction .)
-    SYMBOL          reduce using rule 4 (statement -> p_instruction .)
-    NUMBER          reduce using rule 4 (statement -> p_instruction .)
-    $end            reduce using rule 4 (statement -> p_instruction .)
+    AT              reduce using rule 4 (statement -> a_instruction .)
+    LPAREN          reduce using rule 4 (statement -> a_instruction .)
+    AMD             reduce using rule 4 (statement -> a_instruction .)
+    AD              reduce using rule 4 (statement -> a_instruction .)
+    AM              reduce using rule 4 (statement -> a_instruction .)
+    MD              reduce using rule 4 (statement -> a_instruction .)
+    A               reduce using rule 4 (statement -> a_instruction .)
+    M               reduce using rule 4 (statement -> a_instruction .)
+    D               reduce using rule 4 (statement -> a_instruction .)
+    NOT             reduce using rule 4 (statement -> a_instruction .)
+    MINUS           reduce using rule 4 (statement -> a_instruction .)
+    NUMBER          reduce using rule 4 (statement -> a_instruction .)
+    $end            reduce using rule 4 (statement -> a_instruction .)
 
 
 state 5
 
-    (5) statement -> a_instruction .
+    (5) statement -> l_instruction .
 
-    AT              reduce using rule 5 (statement -> a_instruction .)
-    LPAREN          reduce using rule 5 (statement -> a_instruction .)
-    SYMBOL          reduce using rule 5 (statement -> a_instruction .)
-    NUMBER          reduce using rule 5 (statement -> a_instruction .)
-    $end            reduce using rule 5 (statement -> a_instruction .)
+    AT              reduce using rule 5 (statement -> l_instruction .)
+    LPAREN          reduce using rule 5 (statement -> l_instruction .)
+    AMD             reduce using rule 5 (statement -> l_instruction .)
+    AD              reduce using rule 5 (statement -> l_instruction .)
+    AM              reduce using rule 5 (statement -> l_instruction .)
+    MD              reduce using rule 5 (statement -> l_instruction .)
+    A               reduce using rule 5 (statement -> l_instruction .)
+    M               reduce using rule 5 (statement -> l_instruction .)
+    D               reduce using rule 5 (statement -> l_instruction .)
+    NOT             reduce using rule 5 (statement -> l_instruction .)
+    MINUS           reduce using rule 5 (statement -> l_instruction .)
+    NUMBER          reduce using rule 5 (statement -> l_instruction .)
+    $end            reduce using rule 5 (statement -> l_instruction .)
 
 
 state 6
 
-    (6) statement -> l_instruction .
+    (6) statement -> c_instruction .
 
-    AT              reduce using rule 6 (statement -> l_instruction .)
-    LPAREN          reduce using rule 6 (statement -> l_instruction .)
-    SYMBOL          reduce using rule 6 (statement -> l_instruction .)
-    NUMBER          reduce using rule 6 (statement -> l_instruction .)
-    $end            reduce using rule 6 (statement -> l_instruction .)
+    AT              reduce using rule 6 (statement -> c_instruction .)
+    LPAREN          reduce using rule 6 (statement -> c_instruction .)
+    AMD             reduce using rule 6 (statement -> c_instruction .)
+    AD              reduce using rule 6 (statement -> c_instruction .)
+    AM              reduce using rule 6 (statement -> c_instruction .)
+    MD              reduce using rule 6 (statement -> c_instruction .)
+    A               reduce using rule 6 (statement -> c_instruction .)
+    M               reduce using rule 6 (statement -> c_instruction .)
+    D               reduce using rule 6 (statement -> c_instruction .)
+    NOT             reduce using rule 6 (statement -> c_instruction .)
+    MINUS           reduce using rule 6 (statement -> c_instruction .)
+    NUMBER          reduce using rule 6 (statement -> c_instruction .)
+    $end            reduce using rule 6 (statement -> c_instruction .)
 
 
 state 7
 
-    (10) p_instruction -> dest . EQUAL comp SEMI jump
-    (11) p_instruction -> dest . EQUAL comp
+    (7) a_instruction -> AT . SYMBOL
+    (8) a_instruction -> AT . NUMBER
 
-    EQUAL           shift and go to state 14
+    SYMBOL          shift and go to state 27
+    NUMBER          shift and go to state 28
 
 
 state 8
 
-    (12) p_instruction -> comp . SEMI jump
-    (13) p_instruction -> comp .
+    (34) num -> NUMBER .
 
-    SEMI            shift and go to state 15
-    AT              reduce using rule 13 (p_instruction -> comp .)
-    LPAREN          reduce using rule 13 (p_instruction -> comp .)
-    SYMBOL          reduce using rule 13 (p_instruction -> comp .)
-    NUMBER          reduce using rule 13 (p_instruction -> comp .)
-    $end            reduce using rule 13 (p_instruction -> comp .)
+    SEMI            reduce using rule 34 (num -> NUMBER .)
+    AT              reduce using rule 34 (num -> NUMBER .)
+    LPAREN          reduce using rule 34 (num -> NUMBER .)
+    AMD             reduce using rule 34 (num -> NUMBER .)
+    AD              reduce using rule 34 (num -> NUMBER .)
+    AM              reduce using rule 34 (num -> NUMBER .)
+    MD              reduce using rule 34 (num -> NUMBER .)
+    A               reduce using rule 34 (num -> NUMBER .)
+    M               reduce using rule 34 (num -> NUMBER .)
+    D               reduce using rule 34 (num -> NUMBER .)
+    NOT             reduce using rule 34 (num -> NUMBER .)
+    MINUS           reduce using rule 34 (num -> NUMBER .)
+    NUMBER          reduce using rule 34 (num -> NUMBER .)
+    $end            reduce using rule 34 (num -> NUMBER .)
 
 
 state 9
 
-    (7) a_instruction -> AT . NUMBER
-    (8) a_instruction -> AT . SYMBOL
+    (9) l_instruction -> LPAREN . SYMBOL RPAREN
 
-    NUMBER          shift and go to state 16
-    SYMBOL          shift and go to state 17
+    SYMBOL          shift and go to state 29
 
 
 state 10
 
-    (16) comp -> NUMBER .
+    (10) c_instruction -> dest . EQUAL comp SEMI jump
+    (12) c_instruction -> dest . EQUAL comp
 
-    SEMI            reduce using rule 16 (comp -> NUMBER .)
-    AT              reduce using rule 16 (comp -> NUMBER .)
-    LPAREN          reduce using rule 16 (comp -> NUMBER .)
-    SYMBOL          reduce using rule 16 (comp -> NUMBER .)
-    NUMBER          reduce using rule 16 (comp -> NUMBER .)
-    $end            reduce using rule 16 (comp -> NUMBER .)
+    EQUAL           shift and go to state 30
 
 
 state 11
 
-    (14) dest -> SYMBOL .
-    (15) comp -> SYMBOL .
+    (11) c_instruction -> comp . SEMI jump
+    (13) c_instruction -> comp .
 
-    EQUAL           reduce using rule 14 (dest -> SYMBOL .)
-    SEMI            reduce using rule 15 (comp -> SYMBOL .)
-    AT              reduce using rule 15 (comp -> SYMBOL .)
-    LPAREN          reduce using rule 15 (comp -> SYMBOL .)
-    SYMBOL          reduce using rule 15 (comp -> SYMBOL .)
-    NUMBER          reduce using rule 15 (comp -> SYMBOL .)
-    $end            reduce using rule 15 (comp -> SYMBOL .)
+    SEMI            shift and go to state 31
+    AT              reduce using rule 13 (c_instruction -> comp .)
+    LPAREN          reduce using rule 13 (c_instruction -> comp .)
+    AMD             reduce using rule 13 (c_instruction -> comp .)
+    AD              reduce using rule 13 (c_instruction -> comp .)
+    AM              reduce using rule 13 (c_instruction -> comp .)
+    MD              reduce using rule 13 (c_instruction -> comp .)
+    A               reduce using rule 13 (c_instruction -> comp .)
+    M               reduce using rule 13 (c_instruction -> comp .)
+    D               reduce using rule 13 (c_instruction -> comp .)
+    NOT             reduce using rule 13 (c_instruction -> comp .)
+    MINUS           reduce using rule 13 (c_instruction -> comp .)
+    NUMBER          reduce using rule 13 (c_instruction -> comp .)
+    $end            reduce using rule 13 (c_instruction -> comp .)
 
 
 state 12
 
-    (9) l_instruction -> LPAREN . SYMBOL RPAREN
+    (14) dest -> AMD .
 
-    SYMBOL          shift and go to state 18
+    EQUAL           reduce using rule 14 (dest -> AMD .)
 
 
 state 13
+
+    (15) dest -> AD .
+
+    EQUAL           reduce using rule 15 (dest -> AD .)
+
+
+state 14
+
+    (16) dest -> AM .
+
+    EQUAL           reduce using rule 16 (dest -> AM .)
+
+
+state 15
+
+    (17) dest -> MD .
+
+    EQUAL           reduce using rule 17 (dest -> MD .)
+
+
+state 16
+
+    (18) dest -> A .
+    (36) register -> A .
+
+    EQUAL           reduce using rule 18 (dest -> A .)
+    PLUS            reduce using rule 36 (register -> A .)
+    MINUS           reduce using rule 36 (register -> A .)
+    AND             reduce using rule 36 (register -> A .)
+    OR              reduce using rule 36 (register -> A .)
+    SEMI            reduce using rule 36 (register -> A .)
+    AT              reduce using rule 36 (register -> A .)
+    LPAREN          reduce using rule 36 (register -> A .)
+    AMD             reduce using rule 36 (register -> A .)
+    AD              reduce using rule 36 (register -> A .)
+    AM              reduce using rule 36 (register -> A .)
+    MD              reduce using rule 36 (register -> A .)
+    A               reduce using rule 36 (register -> A .)
+    M               reduce using rule 36 (register -> A .)
+    D               reduce using rule 36 (register -> A .)
+    NOT             reduce using rule 36 (register -> A .)
+    NUMBER          reduce using rule 36 (register -> A .)
+    $end            reduce using rule 36 (register -> A .)
+
+
+state 17
+
+    (19) dest -> M .
+    (37) register -> M .
+
+    EQUAL           reduce using rule 19 (dest -> M .)
+    PLUS            reduce using rule 37 (register -> M .)
+    MINUS           reduce using rule 37 (register -> M .)
+    AND             reduce using rule 37 (register -> M .)
+    OR              reduce using rule 37 (register -> M .)
+    SEMI            reduce using rule 37 (register -> M .)
+    AT              reduce using rule 37 (register -> M .)
+    LPAREN          reduce using rule 37 (register -> M .)
+    AMD             reduce using rule 37 (register -> M .)
+    AD              reduce using rule 37 (register -> M .)
+    AM              reduce using rule 37 (register -> M .)
+    MD              reduce using rule 37 (register -> M .)
+    A               reduce using rule 37 (register -> M .)
+    M               reduce using rule 37 (register -> M .)
+    D               reduce using rule 37 (register -> M .)
+    NOT             reduce using rule 37 (register -> M .)
+    NUMBER          reduce using rule 37 (register -> M .)
+    $end            reduce using rule 37 (register -> M .)
+
+
+state 18
+
+    (20) dest -> D .
+    (38) register -> D .
+
+    EQUAL           reduce using rule 20 (dest -> D .)
+    PLUS            reduce using rule 38 (register -> D .)
+    MINUS           reduce using rule 38 (register -> D .)
+    AND             reduce using rule 38 (register -> D .)
+    OR              reduce using rule 38 (register -> D .)
+    SEMI            reduce using rule 38 (register -> D .)
+    AT              reduce using rule 38 (register -> D .)
+    LPAREN          reduce using rule 38 (register -> D .)
+    AMD             reduce using rule 38 (register -> D .)
+    AD              reduce using rule 38 (register -> D .)
+    AM              reduce using rule 38 (register -> D .)
+    MD              reduce using rule 38 (register -> D .)
+    A               reduce using rule 38 (register -> D .)
+    M               reduce using rule 38 (register -> D .)
+    D               reduce using rule 38 (register -> D .)
+    NOT             reduce using rule 38 (register -> D .)
+    NUMBER          reduce using rule 38 (register -> D .)
+    $end            reduce using rule 38 (register -> D .)
+
+
+state 19
+
+    (21) comp -> registers .
+
+    SEMI            reduce using rule 21 (comp -> registers .)
+    AT              reduce using rule 21 (comp -> registers .)
+    LPAREN          reduce using rule 21 (comp -> registers .)
+    AMD             reduce using rule 21 (comp -> registers .)
+    AD              reduce using rule 21 (comp -> registers .)
+    AM              reduce using rule 21 (comp -> registers .)
+    MD              reduce using rule 21 (comp -> registers .)
+    A               reduce using rule 21 (comp -> registers .)
+    M               reduce using rule 21 (comp -> registers .)
+    D               reduce using rule 21 (comp -> registers .)
+    NOT             reduce using rule 21 (comp -> registers .)
+    MINUS           reduce using rule 21 (comp -> registers .)
+    NUMBER          reduce using rule 21 (comp -> registers .)
+    $end            reduce using rule 21 (comp -> registers .)
+
+
+state 20
+
+    (22) comp -> registerNum .
+
+    SEMI            reduce using rule 22 (comp -> registerNum .)
+    AT              reduce using rule 22 (comp -> registerNum .)
+    LPAREN          reduce using rule 22 (comp -> registerNum .)
+    AMD             reduce using rule 22 (comp -> registerNum .)
+    AD              reduce using rule 22 (comp -> registerNum .)
+    AM              reduce using rule 22 (comp -> registerNum .)
+    MD              reduce using rule 22 (comp -> registerNum .)
+    A               reduce using rule 22 (comp -> registerNum .)
+    M               reduce using rule 22 (comp -> registerNum .)
+    D               reduce using rule 22 (comp -> registerNum .)
+    NOT             reduce using rule 22 (comp -> registerNum .)
+    MINUS           reduce using rule 22 (comp -> registerNum .)
+    NUMBER          reduce using rule 22 (comp -> registerNum .)
+    $end            reduce using rule 22 (comp -> registerNum .)
+
+
+state 21
+
+    (23) comp -> registerFunc .
+
+    SEMI            reduce using rule 23 (comp -> registerFunc .)
+    AT              reduce using rule 23 (comp -> registerFunc .)
+    LPAREN          reduce using rule 23 (comp -> registerFunc .)
+    AMD             reduce using rule 23 (comp -> registerFunc .)
+    AD              reduce using rule 23 (comp -> registerFunc .)
+    AM              reduce using rule 23 (comp -> registerFunc .)
+    MD              reduce using rule 23 (comp -> registerFunc .)
+    A               reduce using rule 23 (comp -> registerFunc .)
+    M               reduce using rule 23 (comp -> registerFunc .)
+    D               reduce using rule 23 (comp -> registerFunc .)
+    NOT             reduce using rule 23 (comp -> registerFunc .)
+    MINUS           reduce using rule 23 (comp -> registerFunc .)
+    NUMBER          reduce using rule 23 (comp -> registerFunc .)
+    $end            reduce using rule 23 (comp -> registerFunc .)
+
+
+state 22
+
+    (24) comp -> register .
+    (26) registers -> register . PLUS register
+    (27) registers -> register . MINUS register
+    (28) registers -> register . AND register
+    (29) registers -> register . OR register
+    (32) registerNum -> register . PLUS num
+    (33) registerNum -> register . MINUS num
+
+  ! shift/reduce conflict for MINUS resolved as shift
+    SEMI            reduce using rule 24 (comp -> register .)
+    AT              reduce using rule 24 (comp -> register .)
+    LPAREN          reduce using rule 24 (comp -> register .)
+    AMD             reduce using rule 24 (comp -> register .)
+    AD              reduce using rule 24 (comp -> register .)
+    AM              reduce using rule 24 (comp -> register .)
+    MD              reduce using rule 24 (comp -> register .)
+    A               reduce using rule 24 (comp -> register .)
+    M               reduce using rule 24 (comp -> register .)
+    D               reduce using rule 24 (comp -> register .)
+    NOT             reduce using rule 24 (comp -> register .)
+    NUMBER          reduce using rule 24 (comp -> register .)
+    $end            reduce using rule 24 (comp -> register .)
+    PLUS            shift and go to state 32
+    MINUS           shift and go to state 33
+    AND             shift and go to state 34
+    OR              shift and go to state 35
+
+  ! MINUS           [ reduce using rule 24 (comp -> register .) ]
+
+
+state 23
+
+    (25) comp -> num .
+
+    SEMI            reduce using rule 25 (comp -> num .)
+    AT              reduce using rule 25 (comp -> num .)
+    LPAREN          reduce using rule 25 (comp -> num .)
+    AMD             reduce using rule 25 (comp -> num .)
+    AD              reduce using rule 25 (comp -> num .)
+    AM              reduce using rule 25 (comp -> num .)
+    MD              reduce using rule 25 (comp -> num .)
+    A               reduce using rule 25 (comp -> num .)
+    M               reduce using rule 25 (comp -> num .)
+    D               reduce using rule 25 (comp -> num .)
+    NOT             reduce using rule 25 (comp -> num .)
+    MINUS           reduce using rule 25 (comp -> num .)
+    NUMBER          reduce using rule 25 (comp -> num .)
+    $end            reduce using rule 25 (comp -> num .)
+
+
+state 24
+
+    (31) registerFunc -> MINUS . register
+    (35) num -> MINUS . NUMBER
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+
+    NUMBER          shift and go to state 37
+    A               shift and go to state 38
+    M               shift and go to state 39
+    D               shift and go to state 40
+
+    register                       shift and go to state 36
+
+state 25
+
+    (30) registerFunc -> NOT . register
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+
+    A               shift and go to state 38
+    M               shift and go to state 39
+    D               shift and go to state 40
+
+    register                       shift and go to state 41
+
+state 26
 
     (1) statements -> statement statements .
 
     $end            reduce using rule 1 (statements -> statement statements .)
 
 
-state 14
+state 27
 
-    (10) p_instruction -> dest EQUAL . comp SEMI jump
-    (11) p_instruction -> dest EQUAL . comp
-    (15) comp -> . SYMBOL
-    (16) comp -> . NUMBER
+    (7) a_instruction -> AT SYMBOL .
 
-    SYMBOL          shift and go to state 20
-    NUMBER          shift and go to state 10
-
-    comp                           shift and go to state 19
-
-state 15
-
-    (12) p_instruction -> comp SEMI . jump
-    (17) jump -> . SYMBOL
-
-    SYMBOL          shift and go to state 22
-
-    jump                           shift and go to state 21
-
-state 16
-
-    (7) a_instruction -> AT NUMBER .
-
-    AT              reduce using rule 7 (a_instruction -> AT NUMBER .)
-    LPAREN          reduce using rule 7 (a_instruction -> AT NUMBER .)
-    SYMBOL          reduce using rule 7 (a_instruction -> AT NUMBER .)
-    NUMBER          reduce using rule 7 (a_instruction -> AT NUMBER .)
-    $end            reduce using rule 7 (a_instruction -> AT NUMBER .)
+    AT              reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    LPAREN          reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    AMD             reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    AD              reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    AM              reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    MD              reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    A               reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    M               reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    D               reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    NOT             reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    MINUS           reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    NUMBER          reduce using rule 7 (a_instruction -> AT SYMBOL .)
+    $end            reduce using rule 7 (a_instruction -> AT SYMBOL .)
 
 
-state 17
+state 28
 
-    (8) a_instruction -> AT SYMBOL .
+    (8) a_instruction -> AT NUMBER .
 
-    AT              reduce using rule 8 (a_instruction -> AT SYMBOL .)
-    LPAREN          reduce using rule 8 (a_instruction -> AT SYMBOL .)
-    SYMBOL          reduce using rule 8 (a_instruction -> AT SYMBOL .)
-    NUMBER          reduce using rule 8 (a_instruction -> AT SYMBOL .)
-    $end            reduce using rule 8 (a_instruction -> AT SYMBOL .)
+    AT              reduce using rule 8 (a_instruction -> AT NUMBER .)
+    LPAREN          reduce using rule 8 (a_instruction -> AT NUMBER .)
+    AMD             reduce using rule 8 (a_instruction -> AT NUMBER .)
+    AD              reduce using rule 8 (a_instruction -> AT NUMBER .)
+    AM              reduce using rule 8 (a_instruction -> AT NUMBER .)
+    MD              reduce using rule 8 (a_instruction -> AT NUMBER .)
+    A               reduce using rule 8 (a_instruction -> AT NUMBER .)
+    M               reduce using rule 8 (a_instruction -> AT NUMBER .)
+    D               reduce using rule 8 (a_instruction -> AT NUMBER .)
+    NOT             reduce using rule 8 (a_instruction -> AT NUMBER .)
+    MINUS           reduce using rule 8 (a_instruction -> AT NUMBER .)
+    NUMBER          reduce using rule 8 (a_instruction -> AT NUMBER .)
+    $end            reduce using rule 8 (a_instruction -> AT NUMBER .)
 
 
-state 18
+state 29
 
     (9) l_instruction -> LPAREN SYMBOL . RPAREN
 
-    RPAREN          shift and go to state 23
+    RPAREN          shift and go to state 42
 
 
-state 19
+state 30
 
-    (10) p_instruction -> dest EQUAL comp . SEMI jump
-    (11) p_instruction -> dest EQUAL comp .
+    (10) c_instruction -> dest EQUAL . comp SEMI jump
+    (12) c_instruction -> dest EQUAL . comp
+    (21) comp -> . registers
+    (22) comp -> . registerNum
+    (23) comp -> . registerFunc
+    (24) comp -> . register
+    (25) comp -> . num
+    (26) registers -> . register PLUS register
+    (27) registers -> . register MINUS register
+    (28) registers -> . register AND register
+    (29) registers -> . register OR register
+    (32) registerNum -> . register PLUS num
+    (33) registerNum -> . register MINUS num
+    (30) registerFunc -> . NOT register
+    (31) registerFunc -> . MINUS register
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+    (34) num -> . NUMBER
+    (35) num -> . MINUS NUMBER
 
-    SEMI            shift and go to state 24
-    AT              reduce using rule 11 (p_instruction -> dest EQUAL comp .)
-    LPAREN          reduce using rule 11 (p_instruction -> dest EQUAL comp .)
-    SYMBOL          reduce using rule 11 (p_instruction -> dest EQUAL comp .)
-    NUMBER          reduce using rule 11 (p_instruction -> dest EQUAL comp .)
-    $end            reduce using rule 11 (p_instruction -> dest EQUAL comp .)
+    NOT             shift and go to state 25
+    MINUS           shift and go to state 24
+    A               shift and go to state 38
+    M               shift and go to state 39
+    D               shift and go to state 40
+    NUMBER          shift and go to state 8
+
+    comp                           shift and go to state 43
+    registers                      shift and go to state 19
+    registerNum                    shift and go to state 20
+    registerFunc                   shift and go to state 21
+    register                       shift and go to state 22
+    num                            shift and go to state 23
+
+state 31
+
+    (11) c_instruction -> comp SEMI . jump
+    (39) jump -> . JGT
+    (40) jump -> . JEQ
+    (41) jump -> . JGE
+    (42) jump -> . JLT
+    (43) jump -> . JNE
+    (44) jump -> . JLE
+    (45) jump -> . JMP
+
+    JGT             shift and go to state 45
+    JEQ             shift and go to state 46
+    JGE             shift and go to state 47
+    JLT             shift and go to state 48
+    JNE             shift and go to state 49
+    JLE             shift and go to state 50
+    JMP             shift and go to state 51
+
+    jump                           shift and go to state 44
+
+state 32
+
+    (26) registers -> register PLUS . register
+    (32) registerNum -> register PLUS . num
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+    (34) num -> . NUMBER
+    (35) num -> . MINUS NUMBER
+
+    A               shift and go to state 38
+    M               shift and go to state 39
+    D               shift and go to state 40
+    NUMBER          shift and go to state 8
+    MINUS           shift and go to state 54
+
+    register                       shift and go to state 52
+    num                            shift and go to state 53
+
+state 33
+
+    (27) registers -> register MINUS . register
+    (33) registerNum -> register MINUS . num
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+    (34) num -> . NUMBER
+    (35) num -> . MINUS NUMBER
+
+    A               shift and go to state 38
+    M               shift and go to state 39
+    D               shift and go to state 40
+    NUMBER          shift and go to state 8
+    MINUS           shift and go to state 54
+
+    register                       shift and go to state 55
+    num                            shift and go to state 56
+
+state 34
+
+    (28) registers -> register AND . register
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+
+    A               shift and go to state 38
+    M               shift and go to state 39
+    D               shift and go to state 40
+
+    register                       shift and go to state 57
+
+state 35
+
+    (29) registers -> register OR . register
+    (36) register -> . A
+    (37) register -> . M
+    (38) register -> . D
+
+    A               shift and go to state 38
+    M               shift and go to state 39
+    D               shift and go to state 40
+
+    register                       shift and go to state 58
+
+state 36
+
+    (31) registerFunc -> MINUS register .
+
+    SEMI            reduce using rule 31 (registerFunc -> MINUS register .)
+    AT              reduce using rule 31 (registerFunc -> MINUS register .)
+    LPAREN          reduce using rule 31 (registerFunc -> MINUS register .)
+    AMD             reduce using rule 31 (registerFunc -> MINUS register .)
+    AD              reduce using rule 31 (registerFunc -> MINUS register .)
+    AM              reduce using rule 31 (registerFunc -> MINUS register .)
+    MD              reduce using rule 31 (registerFunc -> MINUS register .)
+    A               reduce using rule 31 (registerFunc -> MINUS register .)
+    M               reduce using rule 31 (registerFunc -> MINUS register .)
+    D               reduce using rule 31 (registerFunc -> MINUS register .)
+    NOT             reduce using rule 31 (registerFunc -> MINUS register .)
+    MINUS           reduce using rule 31 (registerFunc -> MINUS register .)
+    NUMBER          reduce using rule 31 (registerFunc -> MINUS register .)
+    $end            reduce using rule 31 (registerFunc -> MINUS register .)
 
 
-state 20
+state 37
 
-    (15) comp -> SYMBOL .
+    (35) num -> MINUS NUMBER .
 
-    SEMI            reduce using rule 15 (comp -> SYMBOL .)
-    AT              reduce using rule 15 (comp -> SYMBOL .)
-    LPAREN          reduce using rule 15 (comp -> SYMBOL .)
-    SYMBOL          reduce using rule 15 (comp -> SYMBOL .)
-    NUMBER          reduce using rule 15 (comp -> SYMBOL .)
-    $end            reduce using rule 15 (comp -> SYMBOL .)
-
-
-state 21
-
-    (12) p_instruction -> comp SEMI jump .
-
-    AT              reduce using rule 12 (p_instruction -> comp SEMI jump .)
-    LPAREN          reduce using rule 12 (p_instruction -> comp SEMI jump .)
-    SYMBOL          reduce using rule 12 (p_instruction -> comp SEMI jump .)
-    NUMBER          reduce using rule 12 (p_instruction -> comp SEMI jump .)
-    $end            reduce using rule 12 (p_instruction -> comp SEMI jump .)
+    SEMI            reduce using rule 35 (num -> MINUS NUMBER .)
+    AT              reduce using rule 35 (num -> MINUS NUMBER .)
+    LPAREN          reduce using rule 35 (num -> MINUS NUMBER .)
+    AMD             reduce using rule 35 (num -> MINUS NUMBER .)
+    AD              reduce using rule 35 (num -> MINUS NUMBER .)
+    AM              reduce using rule 35 (num -> MINUS NUMBER .)
+    MD              reduce using rule 35 (num -> MINUS NUMBER .)
+    A               reduce using rule 35 (num -> MINUS NUMBER .)
+    M               reduce using rule 35 (num -> MINUS NUMBER .)
+    D               reduce using rule 35 (num -> MINUS NUMBER .)
+    NOT             reduce using rule 35 (num -> MINUS NUMBER .)
+    MINUS           reduce using rule 35 (num -> MINUS NUMBER .)
+    NUMBER          reduce using rule 35 (num -> MINUS NUMBER .)
+    $end            reduce using rule 35 (num -> MINUS NUMBER .)
 
 
-state 22
+state 38
 
-    (17) jump -> SYMBOL .
+    (36) register -> A .
 
-    AT              reduce using rule 17 (jump -> SYMBOL .)
-    LPAREN          reduce using rule 17 (jump -> SYMBOL .)
-    SYMBOL          reduce using rule 17 (jump -> SYMBOL .)
-    NUMBER          reduce using rule 17 (jump -> SYMBOL .)
-    $end            reduce using rule 17 (jump -> SYMBOL .)
+    SEMI            reduce using rule 36 (register -> A .)
+    AT              reduce using rule 36 (register -> A .)
+    LPAREN          reduce using rule 36 (register -> A .)
+    AMD             reduce using rule 36 (register -> A .)
+    AD              reduce using rule 36 (register -> A .)
+    AM              reduce using rule 36 (register -> A .)
+    MD              reduce using rule 36 (register -> A .)
+    A               reduce using rule 36 (register -> A .)
+    M               reduce using rule 36 (register -> A .)
+    D               reduce using rule 36 (register -> A .)
+    NOT             reduce using rule 36 (register -> A .)
+    MINUS           reduce using rule 36 (register -> A .)
+    NUMBER          reduce using rule 36 (register -> A .)
+    $end            reduce using rule 36 (register -> A .)
+    PLUS            reduce using rule 36 (register -> A .)
+    AND             reduce using rule 36 (register -> A .)
+    OR              reduce using rule 36 (register -> A .)
 
 
-state 23
+state 39
+
+    (37) register -> M .
+
+    SEMI            reduce using rule 37 (register -> M .)
+    AT              reduce using rule 37 (register -> M .)
+    LPAREN          reduce using rule 37 (register -> M .)
+    AMD             reduce using rule 37 (register -> M .)
+    AD              reduce using rule 37 (register -> M .)
+    AM              reduce using rule 37 (register -> M .)
+    MD              reduce using rule 37 (register -> M .)
+    A               reduce using rule 37 (register -> M .)
+    M               reduce using rule 37 (register -> M .)
+    D               reduce using rule 37 (register -> M .)
+    NOT             reduce using rule 37 (register -> M .)
+    MINUS           reduce using rule 37 (register -> M .)
+    NUMBER          reduce using rule 37 (register -> M .)
+    $end            reduce using rule 37 (register -> M .)
+    PLUS            reduce using rule 37 (register -> M .)
+    AND             reduce using rule 37 (register -> M .)
+    OR              reduce using rule 37 (register -> M .)
+
+
+state 40
+
+    (38) register -> D .
+
+    SEMI            reduce using rule 38 (register -> D .)
+    AT              reduce using rule 38 (register -> D .)
+    LPAREN          reduce using rule 38 (register -> D .)
+    AMD             reduce using rule 38 (register -> D .)
+    AD              reduce using rule 38 (register -> D .)
+    AM              reduce using rule 38 (register -> D .)
+    MD              reduce using rule 38 (register -> D .)
+    A               reduce using rule 38 (register -> D .)
+    M               reduce using rule 38 (register -> D .)
+    D               reduce using rule 38 (register -> D .)
+    NOT             reduce using rule 38 (register -> D .)
+    MINUS           reduce using rule 38 (register -> D .)
+    NUMBER          reduce using rule 38 (register -> D .)
+    $end            reduce using rule 38 (register -> D .)
+    PLUS            reduce using rule 38 (register -> D .)
+    AND             reduce using rule 38 (register -> D .)
+    OR              reduce using rule 38 (register -> D .)
+
+
+state 41
+
+    (30) registerFunc -> NOT register .
+
+    SEMI            reduce using rule 30 (registerFunc -> NOT register .)
+    AT              reduce using rule 30 (registerFunc -> NOT register .)
+    LPAREN          reduce using rule 30 (registerFunc -> NOT register .)
+    AMD             reduce using rule 30 (registerFunc -> NOT register .)
+    AD              reduce using rule 30 (registerFunc -> NOT register .)
+    AM              reduce using rule 30 (registerFunc -> NOT register .)
+    MD              reduce using rule 30 (registerFunc -> NOT register .)
+    A               reduce using rule 30 (registerFunc -> NOT register .)
+    M               reduce using rule 30 (registerFunc -> NOT register .)
+    D               reduce using rule 30 (registerFunc -> NOT register .)
+    NOT             reduce using rule 30 (registerFunc -> NOT register .)
+    MINUS           reduce using rule 30 (registerFunc -> NOT register .)
+    NUMBER          reduce using rule 30 (registerFunc -> NOT register .)
+    $end            reduce using rule 30 (registerFunc -> NOT register .)
+
+
+state 42
 
     (9) l_instruction -> LPAREN SYMBOL RPAREN .
 
     AT              reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
     LPAREN          reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
-    SYMBOL          reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    AMD             reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    AD              reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    AM              reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    MD              reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    A               reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    M               reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    D               reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    NOT             reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
+    MINUS           reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
     NUMBER          reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
     $end            reduce using rule 9 (l_instruction -> LPAREN SYMBOL RPAREN .)
 
 
-state 24
+state 43
 
-    (10) p_instruction -> dest EQUAL comp SEMI . jump
-    (17) jump -> . SYMBOL
+    (10) c_instruction -> dest EQUAL comp . SEMI jump
+    (12) c_instruction -> dest EQUAL comp .
 
-    SYMBOL          shift and go to state 22
+    SEMI            shift and go to state 59
+    AT              reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    LPAREN          reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    AMD             reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    AD              reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    AM              reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    MD              reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    A               reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    M               reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    D               reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    NOT             reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    MINUS           reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    NUMBER          reduce using rule 12 (c_instruction -> dest EQUAL comp .)
+    $end            reduce using rule 12 (c_instruction -> dest EQUAL comp .)
 
-    jump                           shift and go to state 25
 
-state 25
+state 44
 
-    (10) p_instruction -> dest EQUAL comp SEMI jump .
+    (11) c_instruction -> comp SEMI jump .
 
-    AT              reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
-    LPAREN          reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
-    SYMBOL          reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
-    NUMBER          reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
-    $end            reduce using rule 10 (p_instruction -> dest EQUAL comp SEMI jump .)
+    AT              reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    LPAREN          reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    AMD             reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    AD              reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    AM              reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    MD              reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    A               reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    M               reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    D               reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    NOT             reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    MINUS           reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    NUMBER          reduce using rule 11 (c_instruction -> comp SEMI jump .)
+    $end            reduce using rule 11 (c_instruction -> comp SEMI jump .)
 
+
+state 45
+
+    (39) jump -> JGT .
+
+    AT              reduce using rule 39 (jump -> JGT .)
+    LPAREN          reduce using rule 39 (jump -> JGT .)
+    AMD             reduce using rule 39 (jump -> JGT .)
+    AD              reduce using rule 39 (jump -> JGT .)
+    AM              reduce using rule 39 (jump -> JGT .)
+    MD              reduce using rule 39 (jump -> JGT .)
+    A               reduce using rule 39 (jump -> JGT .)
+    M               reduce using rule 39 (jump -> JGT .)
+    D               reduce using rule 39 (jump -> JGT .)
+    NOT             reduce using rule 39 (jump -> JGT .)
+    MINUS           reduce using rule 39 (jump -> JGT .)
+    NUMBER          reduce using rule 39 (jump -> JGT .)
+    $end            reduce using rule 39 (jump -> JGT .)
+
+
+state 46
+
+    (40) jump -> JEQ .
+
+    AT              reduce using rule 40 (jump -> JEQ .)
+    LPAREN          reduce using rule 40 (jump -> JEQ .)
+    AMD             reduce using rule 40 (jump -> JEQ .)
+    AD              reduce using rule 40 (jump -> JEQ .)
+    AM              reduce using rule 40 (jump -> JEQ .)
+    MD              reduce using rule 40 (jump -> JEQ .)
+    A               reduce using rule 40 (jump -> JEQ .)
+    M               reduce using rule 40 (jump -> JEQ .)
+    D               reduce using rule 40 (jump -> JEQ .)
+    NOT             reduce using rule 40 (jump -> JEQ .)
+    MINUS           reduce using rule 40 (jump -> JEQ .)
+    NUMBER          reduce using rule 40 (jump -> JEQ .)
+    $end            reduce using rule 40 (jump -> JEQ .)
+
+
+state 47
+
+    (41) jump -> JGE .
+
+    AT              reduce using rule 41 (jump -> JGE .)
+    LPAREN          reduce using rule 41 (jump -> JGE .)
+    AMD             reduce using rule 41 (jump -> JGE .)
+    AD              reduce using rule 41 (jump -> JGE .)
+    AM              reduce using rule 41 (jump -> JGE .)
+    MD              reduce using rule 41 (jump -> JGE .)
+    A               reduce using rule 41 (jump -> JGE .)
+    M               reduce using rule 41 (jump -> JGE .)
+    D               reduce using rule 41 (jump -> JGE .)
+    NOT             reduce using rule 41 (jump -> JGE .)
+    MINUS           reduce using rule 41 (jump -> JGE .)
+    NUMBER          reduce using rule 41 (jump -> JGE .)
+    $end            reduce using rule 41 (jump -> JGE .)
+
+
+state 48
+
+    (42) jump -> JLT .
+
+    AT              reduce using rule 42 (jump -> JLT .)
+    LPAREN          reduce using rule 42 (jump -> JLT .)
+    AMD             reduce using rule 42 (jump -> JLT .)
+    AD              reduce using rule 42 (jump -> JLT .)
+    AM              reduce using rule 42 (jump -> JLT .)
+    MD              reduce using rule 42 (jump -> JLT .)
+    A               reduce using rule 42 (jump -> JLT .)
+    M               reduce using rule 42 (jump -> JLT .)
+    D               reduce using rule 42 (jump -> JLT .)
+    NOT             reduce using rule 42 (jump -> JLT .)
+    MINUS           reduce using rule 42 (jump -> JLT .)
+    NUMBER          reduce using rule 42 (jump -> JLT .)
+    $end            reduce using rule 42 (jump -> JLT .)
+
+
+state 49
+
+    (43) jump -> JNE .
+
+    AT              reduce using rule 43 (jump -> JNE .)
+    LPAREN          reduce using rule 43 (jump -> JNE .)
+    AMD             reduce using rule 43 (jump -> JNE .)
+    AD              reduce using rule 43 (jump -> JNE .)
+    AM              reduce using rule 43 (jump -> JNE .)
+    MD              reduce using rule 43 (jump -> JNE .)
+    A               reduce using rule 43 (jump -> JNE .)
+    M               reduce using rule 43 (jump -> JNE .)
+    D               reduce using rule 43 (jump -> JNE .)
+    NOT             reduce using rule 43 (jump -> JNE .)
+    MINUS           reduce using rule 43 (jump -> JNE .)
+    NUMBER          reduce using rule 43 (jump -> JNE .)
+    $end            reduce using rule 43 (jump -> JNE .)
+
+
+state 50
+
+    (44) jump -> JLE .
+
+    AT              reduce using rule 44 (jump -> JLE .)
+    LPAREN          reduce using rule 44 (jump -> JLE .)
+    AMD             reduce using rule 44 (jump -> JLE .)
+    AD              reduce using rule 44 (jump -> JLE .)
+    AM              reduce using rule 44 (jump -> JLE .)
+    MD              reduce using rule 44 (jump -> JLE .)
+    A               reduce using rule 44 (jump -> JLE .)
+    M               reduce using rule 44 (jump -> JLE .)
+    D               reduce using rule 44 (jump -> JLE .)
+    NOT             reduce using rule 44 (jump -> JLE .)
+    MINUS           reduce using rule 44 (jump -> JLE .)
+    NUMBER          reduce using rule 44 (jump -> JLE .)
+    $end            reduce using rule 44 (jump -> JLE .)
+
+
+state 51
+
+    (45) jump -> JMP .
+
+    AT              reduce using rule 45 (jump -> JMP .)
+    LPAREN          reduce using rule 45 (jump -> JMP .)
+    AMD             reduce using rule 45 (jump -> JMP .)
+    AD              reduce using rule 45 (jump -> JMP .)
+    AM              reduce using rule 45 (jump -> JMP .)
+    MD              reduce using rule 45 (jump -> JMP .)
+    A               reduce using rule 45 (jump -> JMP .)
+    M               reduce using rule 45 (jump -> JMP .)
+    D               reduce using rule 45 (jump -> JMP .)
+    NOT             reduce using rule 45 (jump -> JMP .)
+    MINUS           reduce using rule 45 (jump -> JMP .)
+    NUMBER          reduce using rule 45 (jump -> JMP .)
+    $end            reduce using rule 45 (jump -> JMP .)
+
+
+state 52
+
+    (26) registers -> register PLUS register .
+
+    SEMI            reduce using rule 26 (registers -> register PLUS register .)
+    AT              reduce using rule 26 (registers -> register PLUS register .)
+    LPAREN          reduce using rule 26 (registers -> register PLUS register .)
+    AMD             reduce using rule 26 (registers -> register PLUS register .)
+    AD              reduce using rule 26 (registers -> register PLUS register .)
+    AM              reduce using rule 26 (registers -> register PLUS register .)
+    MD              reduce using rule 26 (registers -> register PLUS register .)
+    A               reduce using rule 26 (registers -> register PLUS register .)
+    M               reduce using rule 26 (registers -> register PLUS register .)
+    D               reduce using rule 26 (registers -> register PLUS register .)
+    NOT             reduce using rule 26 (registers -> register PLUS register .)
+    MINUS           reduce using rule 26 (registers -> register PLUS register .)
+    NUMBER          reduce using rule 26 (registers -> register PLUS register .)
+    $end            reduce using rule 26 (registers -> register PLUS register .)
+
+
+state 53
+
+    (32) registerNum -> register PLUS num .
+
+    SEMI            reduce using rule 32 (registerNum -> register PLUS num .)
+    AT              reduce using rule 32 (registerNum -> register PLUS num .)
+    LPAREN          reduce using rule 32 (registerNum -> register PLUS num .)
+    AMD             reduce using rule 32 (registerNum -> register PLUS num .)
+    AD              reduce using rule 32 (registerNum -> register PLUS num .)
+    AM              reduce using rule 32 (registerNum -> register PLUS num .)
+    MD              reduce using rule 32 (registerNum -> register PLUS num .)
+    A               reduce using rule 32 (registerNum -> register PLUS num .)
+    M               reduce using rule 32 (registerNum -> register PLUS num .)
+    D               reduce using rule 32 (registerNum -> register PLUS num .)
+    NOT             reduce using rule 32 (registerNum -> register PLUS num .)
+    MINUS           reduce using rule 32 (registerNum -> register PLUS num .)
+    NUMBER          reduce using rule 32 (registerNum -> register PLUS num .)
+    $end            reduce using rule 32 (registerNum -> register PLUS num .)
+
+
+state 54
+
+    (35) num -> MINUS . NUMBER
+
+    NUMBER          shift and go to state 37
+
+
+state 55
+
+    (27) registers -> register MINUS register .
+
+    SEMI            reduce using rule 27 (registers -> register MINUS register .)
+    AT              reduce using rule 27 (registers -> register MINUS register .)
+    LPAREN          reduce using rule 27 (registers -> register MINUS register .)
+    AMD             reduce using rule 27 (registers -> register MINUS register .)
+    AD              reduce using rule 27 (registers -> register MINUS register .)
+    AM              reduce using rule 27 (registers -> register MINUS register .)
+    MD              reduce using rule 27 (registers -> register MINUS register .)
+    A               reduce using rule 27 (registers -> register MINUS register .)
+    M               reduce using rule 27 (registers -> register MINUS register .)
+    D               reduce using rule 27 (registers -> register MINUS register .)
+    NOT             reduce using rule 27 (registers -> register MINUS register .)
+    MINUS           reduce using rule 27 (registers -> register MINUS register .)
+    NUMBER          reduce using rule 27 (registers -> register MINUS register .)
+    $end            reduce using rule 27 (registers -> register MINUS register .)
+
+
+state 56
+
+    (33) registerNum -> register MINUS num .
+
+    SEMI            reduce using rule 33 (registerNum -> register MINUS num .)
+    AT              reduce using rule 33 (registerNum -> register MINUS num .)
+    LPAREN          reduce using rule 33 (registerNum -> register MINUS num .)
+    AMD             reduce using rule 33 (registerNum -> register MINUS num .)
+    AD              reduce using rule 33 (registerNum -> register MINUS num .)
+    AM              reduce using rule 33 (registerNum -> register MINUS num .)
+    MD              reduce using rule 33 (registerNum -> register MINUS num .)
+    A               reduce using rule 33 (registerNum -> register MINUS num .)
+    M               reduce using rule 33 (registerNum -> register MINUS num .)
+    D               reduce using rule 33 (registerNum -> register MINUS num .)
+    NOT             reduce using rule 33 (registerNum -> register MINUS num .)
+    MINUS           reduce using rule 33 (registerNum -> register MINUS num .)
+    NUMBER          reduce using rule 33 (registerNum -> register MINUS num .)
+    $end            reduce using rule 33 (registerNum -> register MINUS num .)
+
+
+state 57
+
+    (28) registers -> register AND register .
+
+    SEMI            reduce using rule 28 (registers -> register AND register .)
+    AT              reduce using rule 28 (registers -> register AND register .)
+    LPAREN          reduce using rule 28 (registers -> register AND register .)
+    AMD             reduce using rule 28 (registers -> register AND register .)
+    AD              reduce using rule 28 (registers -> register AND register .)
+    AM              reduce using rule 28 (registers -> register AND register .)
+    MD              reduce using rule 28 (registers -> register AND register .)
+    A               reduce using rule 28 (registers -> register AND register .)
+    M               reduce using rule 28 (registers -> register AND register .)
+    D               reduce using rule 28 (registers -> register AND register .)
+    NOT             reduce using rule 28 (registers -> register AND register .)
+    MINUS           reduce using rule 28 (registers -> register AND register .)
+    NUMBER          reduce using rule 28 (registers -> register AND register .)
+    $end            reduce using rule 28 (registers -> register AND register .)
+
+
+state 58
+
+    (29) registers -> register OR register .
+
+    SEMI            reduce using rule 29 (registers -> register OR register .)
+    AT              reduce using rule 29 (registers -> register OR register .)
+    LPAREN          reduce using rule 29 (registers -> register OR register .)
+    AMD             reduce using rule 29 (registers -> register OR register .)
+    AD              reduce using rule 29 (registers -> register OR register .)
+    AM              reduce using rule 29 (registers -> register OR register .)
+    MD              reduce using rule 29 (registers -> register OR register .)
+    A               reduce using rule 29 (registers -> register OR register .)
+    M               reduce using rule 29 (registers -> register OR register .)
+    D               reduce using rule 29 (registers -> register OR register .)
+    NOT             reduce using rule 29 (registers -> register OR register .)
+    MINUS           reduce using rule 29 (registers -> register OR register .)
+    NUMBER          reduce using rule 29 (registers -> register OR register .)
+    $end            reduce using rule 29 (registers -> register OR register .)
+
+
+state 59
+
+    (10) c_instruction -> dest EQUAL comp SEMI . jump
+    (39) jump -> . JGT
+    (40) jump -> . JEQ
+    (41) jump -> . JGE
+    (42) jump -> . JLT
+    (43) jump -> . JNE
+    (44) jump -> . JLE
+    (45) jump -> . JMP
+
+    JGT             shift and go to state 45
+    JEQ             shift and go to state 46
+    JGE             shift and go to state 47
+    JLT             shift and go to state 48
+    JNE             shift and go to state 49
+    JLE             shift and go to state 50
+    JMP             shift and go to state 51
+
+    jump                           shift and go to state 60
+
+state 60
+
+    (10) c_instruction -> dest EQUAL comp SEMI jump .
+
+    AT              reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    LPAREN          reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    AMD             reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    AD              reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    AM              reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    MD              reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    A               reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    M               reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    D               reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    NOT             reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    MINUS           reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    NUMBER          reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+    $end            reduce using rule 10 (c_instruction -> dest EQUAL comp SEMI jump .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for MINUS in state 22 resolved as shift

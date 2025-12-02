@@ -42,7 +42,12 @@ class HackCodeAnalyze:
     def __exit__(self, *args):
         pass
 
-    def __init__(self, code = "", debug = True):
+    def __init__(
+        self, 
+        code = "", 
+        ram = 65536,
+        debug = True
+    ):
         self.debug              = debug
         self.set_code(code)
 
@@ -63,7 +68,7 @@ class HackCodeAnalyze:
         self.nextVarAddr = self.registerNum
 
         self.registers = {"A": 0, "D": 0} # レジスタ値
-        self.ram = [0] * 32768
+        self.ram = [0] * ram
         self.pc = 0
 
         self.t_ignore           = ' \t'     # A string containing ignored characters (spaces and tabs)
@@ -190,13 +195,13 @@ class HackCodeAnalyze:
     # A命令
     def p_a_instruction(self, p):
         """
-        a_instruction   : AT NUMBER
-                        | AT SYMBOL
+        a_instruction   : AT SYMBOL
+                        | AT NUMBER
         """
         if isinstance(p[2], int):
             value = p[2]
         else:
-            label = p[2]
+            label = str(p[2])
             if label not in self.varTable:
                 addr = self.get_next_addr()
                 if addr is not None:
@@ -277,13 +282,14 @@ class HackCodeAnalyze:
                 | M
                 | D
         """
-        p[0] = p[1]
+        p[0] = str(p[1])
 
     def p_comp(self, p):
         """
         comp        : registers
-                    | registerFunc
                     | registerNum
+                    | registerFunc
+                    | register
                     | num
         """
         p[0] = p[1]
@@ -343,7 +349,7 @@ class HackCodeAnalyze:
                     | M
                     | D
         """
-        p[0] = p[1]
+        p[0] = str(p[1])
     
     
     def p_jump(self, p):
@@ -362,7 +368,7 @@ class HackCodeAnalyze:
     def eval_comp(self, node): # comp 評価関数
 
         # レジスタ単体
-        if isinstance(node, str) and node in self.registers:
+        if isinstance(node, str):
             if node == "A":
                 return self.registers["A"]
             if node == "D":
@@ -410,7 +416,7 @@ if __name__ == "__main__":
         program = source.read()
 
     with HackCodeAnalyze(program) as l:
-        print(l)
-        # result = l.parse()
+        # print(l)
+        result = l.parse()
 
     input("終了")
