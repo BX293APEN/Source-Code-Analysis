@@ -11,6 +11,7 @@ class HackCodeAnalyze:
 | .build | **kwargs | lexにオブジェクトを認識させる(ブロック構文で自動実行) |
 | .get_tokens | - | lexで字句解析をし、トークン化する |
 | .parse | - | YACCで構文解析をし、トークン化する |
+| .asm | - | Hackアセンブリ化したコードをリストで返す |
     """
 
     def set_code(self,code = ""):
@@ -322,6 +323,9 @@ class HackCodeAnalyze:
                 destCode |= 0b001
         
         destCode = f"{destCode:03b}"
+        
+        if code not in self.compCode:
+            raise Exception(f"Syntax error at: {comp}")
         
         cCode = f"111{self.compCode[code]}{destCode}{jump["code"]}"
         p[0] = {
