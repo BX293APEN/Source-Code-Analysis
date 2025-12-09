@@ -1,5 +1,7 @@
 from ply import lex, yacc
 from sys import argv, exit
+import os
+
 class HackCodeAnalyze:
     """オブジェクトの説明
 | method | args | description |
@@ -30,6 +32,9 @@ class HackCodeAnalyze:
                 break
             self.sourceTokenList.append(tok)
         return self.sourceTokenList
+    
+    def get_vars(self):
+        return self.varTable
 
     def __str__(self):
         self.get_tokens()
@@ -90,6 +95,40 @@ class HackCodeAnalyze:
             'JLE', 
             'JMP'
         )
+
+        self.compCode = {
+            # a == 0
+            "0"  : "0101010",
+            "1"  : "0111111",
+            "-1" : "0111010",
+            "D"  : "0001100",
+            "A"  : "0110000",
+            "!D" : "0001101",
+            "!A" : "0110001",
+            "-D" : "0001111",
+            "-A" : "0110011",
+            "D+1": "0011111",
+            "A+1": "0110111",
+            "D-1": "0001110",
+            "A-1": "0110010",
+            "D+A": "0000010",
+            "D-A": "0010011",
+            "A-D": "0000111",
+            "D&A": "0000000",
+            "D|A": "0010101",
+
+            # a == 1
+            "M"  : "1110000",
+            "!M" : "1110001",
+            "-M" : "1110011",
+            "M+1": "1110111",
+            "M-1": "1110010",
+            "D+M": "1000010",
+            "D-M": "1010011",
+            "M-D": "1000111",
+            "D&M": "1000000",
+            "D|M": "1010101",
+        }
 
         self.tokens         = (         # tokensの要素に t_を付けると定義可能
             'AT',       # '@'
@@ -212,7 +251,7 @@ class HackCodeAnalyze:
 
         self.registers["A"] = value
 
-        p[0] = {"type": "A", "value": value}
+        p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"0{value:015b}", "at" : str(p[2])}
         
 
     
@@ -224,7 +263,7 @@ class HackCodeAnalyze:
         label = p[2]
         self.varTable[label] = self.pc
 
-        p[0] = {"type": "L", "label": label}
+        p[0] = {"instruction": "L", "label": label}
 
     #   C 命令
     # dest=comp;jump
@@ -239,7 +278,8 @@ class HackCodeAnalyze:
 
         dest = None
         comp = None
-        jump = None
+        jump = dict()
+        jump["code"] = "000"
 
         if len(p) == 2:
             comp = p[1]
@@ -254,24 +294,31 @@ class HackCodeAnalyze:
             comp = p[3]
             jump = p[5]
 
-        value = self.eval_comp(comp)
+        value, code = self.eval_comp(comp)
 
-        # 000
+        destCode = 0b000
         if dest:
-            if "A" in dest: # 100
+            if "A" in dest:
                 self.registers["A"] = value
-            if "D" in dest: # 010
+                destCode |= 0b100
+            if "D" in dest:
                 self.registers["D"] = value
-            if "M" in dest: # 001
+                destCode |= 0b010
+            if "M" in dest:
                 addr            = self.registers["A"]
                 self.ram[addr]  = value
-
+                destCode |= 0b001
+        
+        destCode = f"{destCode:03b}"
+        
+        cCode = f"111{self.compCode[code]}{destCode}{jump["code"]}"
         p[0] = {
-            "type": "C",
+            "instruction": "C",
             "dest": dest,
             "comp": comp,
             "jump": jump,
             "value": value,
+            "code" : cCode
         }
 
 
@@ -365,7 +412,29 @@ class HackCodeAnalyze:
                 | JLE
                 | JMP
         """
-        p[0] = p[1]
+
+        jumpCode = dict()
+
+        jumpCode["type"] = p[1]
+        if str(p[1]) == "JGT":
+            jumpCode["code"] = f"001"
+        elif str(p[1]) == "JEQ":
+            jumpCode["code"] = f"010"
+        elif str(p[1]) == "JGE":
+            jumpCode["code"] = f"011"
+        elif str(p[1]) == "JLT":
+            jumpCode["code"] = f"100"
+        elif str(p[1]) == "JNE":
+            jumpCode["code"] = f"101"
+        elif str(p[1]) == "JLE":
+            jumpCode["code"] = f"110"
+        elif str(p[1]) == "JMP":
+            jumpCode["code"] = f"111"
+        else:
+            print("ERROR : JUMP")
+            jumpCode["code"] = f"000"
+        
+        p[0] = jumpCode
     
 
     def eval_comp(self, node): # comp 評価関数
@@ -373,43 +442,62 @@ class HackCodeAnalyze:
         # レジスタ単体
         if isinstance(node, str):
             if node == "A":
-                return self.registers["A"]
+                return self.registers["A"], "A"
             if node == "D":
-                return self.registers["D"]
+                return self.registers["D"] ,"D"
             if node == "M":
-                return self.ram[self.registers["A"]]
+                return self.ram[self.registers["A"]], "M"
 
         # 数字
         if isinstance(node, int):
-            return node
+            return node, f"{node}"
 
         # 単項
         if ("op" in node) and ("value" in node):
-            val = self.eval_comp(node["value"])
+            val, code = self.eval_comp(node["value"])
             if node["op"] == "!":
-                return (~val) & 0xFFFF
+                return (~val) & 0xFFFF, f"!{code}"
             if node["op"] == "-":
-                return -val
+                return -val, f"-{code}"
 
         # 二項
         if "op" in node:
-            left = self.eval_comp(node["left"])
-            right = self.eval_comp(node["right"])
+            left, lCode = self.eval_comp(node["left"])
+            right, rCode = self.eval_comp(node["right"])
             op = node["op"]
 
             if op == "+":
-                return (left + right) & 0xFFFF
+                return (left + right) & 0xFFFF, f"{lCode}+{rCode}"
             if op == "-":
-                return (left - right) & 0xFFFF
+                return (left - right) & 0xFFFF, f"{lCode}-{rCode}"
             if op == "&":
-                return (left & right) & 0xFFFF
+                return (left & right) & 0xFFFF, f"{lCode}&{rCode}"
             if op == "|":
-                return (left | right) & 0xFFFF
+                return (left | right) & 0xFFFF, f"{lCode}|{rCode}"
 
         raise Exception("Unknown comp node: " + str(node))
     
+    def asm(self):
+        """
+        .hack 用の 16bit バイナリを list で返す
+        """
+
+        out = []
+        for i in self.parse():
+            if i["instruction"] == "A":
+                if i["type"] == "NUMBER":
+                    out.append(i["code"])
+                else:
+                    out.append(f"0{self.varTable[i["at"]]:015b}")
+            elif i["instruction"] == "C":
+                out.append(i["code"])
+
+        return out
+    
 
 if __name__ == "__main__":
+    debug = False
+
     if len(argv) < 2:
         file = "main.asm"
     else:
@@ -418,9 +506,18 @@ if __name__ == "__main__":
     with open(file, "r", encoding="UTF-8") as source:
         program = source.read()
 
-    with HackCodeAnalyze(program, debug = False) as l:
+    with HackCodeAnalyze(program, debug = debug) as l:
         # print(l)
-        result = l.parse()
+        result = l.asm()
     
-    # .hack
+    hackFile = f"{os.path.splitext(file)[0]}.hack"
+    with open(hackFile, "w", encoding="UTF-8") as f:
+        f.write("")
+    
+    with open(hackFile, "a", encoding="UTF-8") as f:
+        for r in result:
+            print(r, file=f)
+            if (debug):
+                print(r)
+        
     input("終了")
