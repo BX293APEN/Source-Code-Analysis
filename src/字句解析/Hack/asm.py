@@ -200,6 +200,8 @@ class HackCodeAnalyze:
         """
         if isinstance(p[2], int):
             value = p[2]
+            if self.debug:
+                print(f"0{value:015b}")
         else:
             label = str(p[2])
             if label not in self.varTable:
@@ -254,12 +256,13 @@ class HackCodeAnalyze:
 
         value = self.eval_comp(comp)
 
+        # 000
         if dest:
-            if "A" in dest:
+            if "A" in dest: # 100
                 self.registers["A"] = value
-            if "D" in dest:
+            if "D" in dest: # 010
                 self.registers["D"] = value
-            if "M" in dest:
+            if "M" in dest: # 001
                 addr            = self.registers["A"]
                 self.ram[addr]  = value
 
@@ -415,8 +418,9 @@ if __name__ == "__main__":
     with open(file, "r", encoding="UTF-8") as source:
         program = source.read()
 
-    with HackCodeAnalyze(program) as l:
+    with HackCodeAnalyze(program, debug = False) as l:
         # print(l)
         result = l.parse()
-
+    
+    # .hack
     input("終了")
