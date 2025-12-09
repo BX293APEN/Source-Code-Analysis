@@ -55,18 +55,29 @@ class HackCodeAnalyze:
         self.set_code(code)
 
         self.varTable           = {
-            'SP': 0, 
-            'LCL': 1, 
-            'ARG': 2, 
-            'THIS': 3, 
-            'THAT': 4,
-            'SCREEN': 16384, 
-            'KBD': 24576
+            "SP": 0, 
+            "LCL": 1, 
+            "ARG": 2, 
+            "THIS": 3, 
+            "THAT": 4,
+            "SCREEN": 16384, 
+            "KBD": 24576
         }
+
+        self.reservedVars = [
+            "SP", 
+            "LCL", 
+            "ARG", 
+            "THIS", 
+            "THAT",
+            "SCREEN", 
+            "KBD"
+        ]
         
         self.registerNum = 16
         for i in range(self.registerNum):
-            self.varTable[f'R{i}'] = i
+            self.varTable[f"R{i}"] = i
+            self.reservedVars.append(f"R{i}")
 
         self.nextVarAddr = self.registerNum
 
@@ -78,20 +89,22 @@ class HackCodeAnalyze:
         self.t_ignore_comment   = r'//.*'
 
         self.reservedWords = (
-            'AMD',
-            'AD', 
-            'AM', 
-            'MD', 
-            'A', 
-            'M', 
-            'D', 
-            'JGT', 
-            'JEQ', 
-            'JGE', 
-            'JLT', 
-            'JNE', 
-            'JLE', 
-            'JMP'
+            "AMD",
+            "ADM",
+            "AD", 
+            "AM", 
+            "MD", 
+            "DM",
+            "A", 
+            "M", 
+            "D", 
+            "JGT", 
+            "JEQ", 
+            "JGE", 
+            "JLT", 
+            "JNE", 
+            "JLE", 
+            "JMP"
         )
 
         self.compCode = {
@@ -129,18 +142,18 @@ class HackCodeAnalyze:
         }
 
         self.tokens         = (         # tokensの要素に t_を付けると定義可能
-            'AT',       # '@'
-            'LPAREN',   # '('
-            'RPAREN',   # ')'
-            'EQUAL',    # '='
-            'SEMI',     # ';'
-            'PLUS',     # '+'
-            'MINUS',    # '-'
-            'AND',      # '&'
-            'OR',       # '|'
-            'NOT',      # '!'
-            'NUMBER',
-            'SYMBOL',
+            "AT",       # "@"
+            "LPAREN",   # "("
+            "RPAREN",   # ")"
+            "EQUAL",    # "="
+            "SEMI",     # ";"
+            "PLUS",     # "+"
+            "MINUS",    # "-"
+            "AND",      # "&"
+            "OR",       # "|"
+            "NOT",      # "!"
+            "NUMBER",
+            "SYMBOL",
 
         ) + self.reservedWords
         
@@ -224,7 +237,7 @@ class HackCodeAnalyze:
     
     def get_next_addr(self):
         value = None
-        if self.nextVarAddr < self.varTable['SCREEN']:
+        if self.nextVarAddr < self.varTable["SCREEN"]:
             value = self.nextVarAddr
         self.nextVarAddr += 1
         return value
@@ -239,18 +252,18 @@ class HackCodeAnalyze:
             value = p[2]
             if self.debug:
                 print(f"0{value:015b}")
+            self.registers["A"] = value
+            p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"0{value:015b}", "at" : str(p[2])}
         else:
             label = str(p[2])
-            if label not in self.varTable:
-                addr = self.get_next_addr()
-                if addr is not None:
-                    self.varTable[label] = addr
-            value = self.varTable[label]
-
-        self.registers["A"] = value
-
-        p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"0{value:015b}", "at" : str(p[2])}
-        
+            if label in self.varTable:
+                value = self.varTable[label]
+                self.registers["A"] = value
+                p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"0{value:015b}", "at" : str(p[2])}
+            else:
+                self.varTable[label] = -1 # 不定フラグ
+                self.registers["A"] = 0
+                p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"pending", "at" : str(p[2])}
 
     
     # L命令 (LABEL)
@@ -259,7 +272,8 @@ class HackCodeAnalyze:
         l_instruction : LPAREN SYMBOL RPAREN
         """
         label = p[2]
-        self.varTable[label] = self.pc
+        if label not in self.reservedVars:
+            self.varTable[label] = self.pc
 
         p[0] = {"instruction": "L", "label": label}
 
@@ -323,9 +337,11 @@ class HackCodeAnalyze:
     def p_dest(self, p):
         """
         dest    : AMD
+                | ADM
                 | AD
                 | AM
                 | MD 
+                | DM
                 | A
                 | M
                 | D
@@ -486,7 +502,17 @@ class HackCodeAnalyze:
                 if i["type"] == "NUMBER":
                     out.append(i["code"])
                 else:
+                    if (
+                        (i["code"] == "pending") and 
+                        (self.varTable[i["at"]] == -1)
+                    ):
+                        addr = self.get_next_addr()
+                        if addr is not None:
+                            self.varTable[i["at"]] = addr
+                        else: 
+                            self.varTable[i["at"]] = 0
                     out.append(f"0{self.varTable[i["at"]]:015b}")
+
             elif i["instruction"] == "C":
                 out.append(i["code"])
 
@@ -508,7 +534,13 @@ if __name__ == "__main__":
         # print(l)
         result = l.asm()
     
-    hackFile = f"{os.path.splitext(file)[0]}.hack"
+    dirName = os.path.dirname(file)
+    buildDir = f"{dirName}/build"
+    os.makedirs(buildDir, exist_ok=True)
+
+    baseName = os.path.splitext(os.path.basename(file))[0]  # ファイル名だけ取り出す
+    hackFile = os.path.join(buildDir, f"{baseName}.hack")
+
     with open(hackFile, "w", encoding="UTF-8") as f:
         f.write("")
     
