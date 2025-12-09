@@ -33,8 +33,6 @@ class HackCodeAnalyze:
             self.sourceTokenList.append(tok)
         return self.sourceTokenList
     
-    def get_vars(self):
-        return self.varTable
 
     def __str__(self):
         self.get_tokens()
