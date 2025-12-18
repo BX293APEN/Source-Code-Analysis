@@ -67,7 +67,7 @@ class HackCodeAnalyze:
         self.debug              = debug
         self.set_code(code)
 
-        self.varTable           = {
+        self.varTable           = {         # シンボルテーブル
             "SP"                : 0, 
             "LCL"               : 1, 
             "ARG"               : 2, 
@@ -77,7 +77,7 @@ class HackCodeAnalyze:
             "KBD"               : 24576
         }
 
-        self.reservedVars       = [
+        self.reservedVars       = [         # 定数名
             "SP", 
             "LCL", 
             "ARG", 
@@ -98,7 +98,7 @@ class HackCodeAnalyze:
         self.t_ignore           = ' \t'     # A string containing ignored characters (spaces and tabs)
         self.t_ignore_comment   = r'//.*'
 
-        self.reservedWords      = (
+        self.reservedWords      = (         # 予約語
             "AMD",
             "ADM",
             "AD", 
