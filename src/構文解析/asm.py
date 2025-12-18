@@ -567,7 +567,7 @@ class HackCodeAnalyze:
     
 
 if __name__ == "__main__":
-    debug = False
+    debug           = False
 
     if len(argv)    < 2:
         file        = "main.asm"
