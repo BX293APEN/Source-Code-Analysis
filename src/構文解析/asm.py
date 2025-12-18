@@ -235,22 +235,22 @@ class HackCodeAnalyze:
                 "at"            : str(p[2])
             }
         else:
-            label               = str(p[2])
+            label                   = str(p[2])
             if label in self.varTable.keys():
-                value           = self.varTable[label]
-                p[0]            = {
-                    "instruction": "A", 
-                    "type": f"{p.slice[2].type}", 
-                    "code" : f"0{value:015b}", 
-                    "at" : str(p[2])
+                value               = self.varTable[label]
+                p[0]                = {
+                    "instruction"   : "A", 
+                    "type"          : f"{p.slice[2].type}", 
+                    "code"          : f"0{value:015b}", 
+                    "at"            : str(p[2])
                 }
             else:
                 self.varTable[label] = -1 # 不定フラグ
-                p[0]            = {
-                    "instruction": "A", 
-                    "type": f"{p.slice[2].type}", 
-                    "code" : f"pending", 
-                    "at" : str(p[2])
+                p[0]                = {
+                    "instruction"   : "A", 
+                    "type"          : f"{p.slice[2].type}", 
+                    "code"          : f"pending", 
+                    "at"            : str(p[2])
                 }
 
     # L命令 (LABEL)

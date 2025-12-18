@@ -14,21 +14,34 @@ class HackCodeAnalyze:
 | .asm | - | Hackアセンブリ化したコードをリストで返す |
     """
 
-    def set_code(self,code = ""):
-        self.code = code
+    def set_code(
+        self,
+        code                    = ""
+    ):
+        self.code               = code
 
     def build(self, **kwargs):
-        self.lexer = lex.lex(module=self, **kwargs)
-        self.yacc = yacc.yacc(module=self, **kwargs)
+        self.lexer              = lex.lex(
+            module              = self, 
+            **kwargs
+        )
+        
+        self.yacc               = yacc.yacc(
+            module              = self, 
+            **kwargs
+        )
     
     def parse(self): # yacc による構文解析
-        return self.yacc.parse(self.code, lexer=self.lexer)
+        return self.yacc.parse(
+            self.code, 
+            lexer               = self.lexer
+        )
     
     def get_tokens(self):
         self.lexer.input(self.code)
-        self.sourceTokenList  = []
+        self.sourceTokenList    = []
         while True:
-            tok = self.lexer.token()
+            tok                 = self.lexer.token()
             if not tok:
                 break
             self.sourceTokenList.append(tok)
@@ -48,24 +61,23 @@ class HackCodeAnalyze:
 
     def __init__(
         self, 
-        code = "", 
-        ram = 65536,
-        debug = True
+        code                    = "", 
+        debug                   = True
     ):
         self.debug              = debug
         self.set_code(code)
 
         self.varTable           = {
-            "SP": 0, 
-            "LCL": 1, 
-            "ARG": 2, 
-            "THIS": 3, 
-            "THAT": 4,
-            "SCREEN": 16384, 
-            "KBD": 24576
+            "SP"                : 0, 
+            "LCL"               : 1, 
+            "ARG"               : 2, 
+            "THIS"              : 3, 
+            "THAT"              : 4,
+            "SCREEN"            : 16384, 
+            "KBD"               : 24576
         }
 
-        self.reservedVars = [
+        self.reservedVars       = [
             "SP", 
             "LCL", 
             "ARG", 
@@ -75,21 +87,18 @@ class HackCodeAnalyze:
             "KBD"
         ]
         
-        self.registerNum = 16
+        self.registerNum        = 16
         for i in range(self.registerNum):
             self.varTable[f"R{i}"] = i
             self.reservedVars.append(f"R{i}")
 
-        self.nextVarAddr = self.registerNum
-
-        self.registers = {"A": 0, "D": 0} # レジスタ値
-        self.ram = [0] * ram
+        self.nextVarAddr        = self.registerNum
         self.pc = 0
 
         self.t_ignore           = ' \t'     # A string containing ignored characters (spaces and tabs)
         self.t_ignore_comment   = r'//.*'
 
-        self.reservedWords = (
+        self.reservedWords      = (
             "AMD",
             "ADM",
             "AD", 
@@ -108,41 +117,7 @@ class HackCodeAnalyze:
             "JMP"
         )
 
-        self.compCode = {
-            # a == 0
-            "0"  : "0101010",
-            "1"  : "0111111",
-            "-1" : "0111010",
-            "D"  : "0001100",
-            "A"  : "0110000",
-            "!D" : "0001101",
-            "!A" : "0110001",
-            "-D" : "0001111",
-            "-A" : "0110011",
-            "D+1": "0011111",
-            "A+1": "0110111",
-            "D-1": "0001110",
-            "A-1": "0110010",
-            "D+A": "0000010",
-            "D-A": "0010011",
-            "A-D": "0000111",
-            "D&A": "0000000",
-            "D|A": "0010101",
-
-            # a == 1
-            "M"  : "1110000",
-            "!M" : "1110001",
-            "-M" : "1110011",
-            "M+1": "1110111",
-            "M-1": "1110010",
-            "D+M": "1000010",
-            "D-M": "1010011",
-            "M-D": "1000111",
-            "D&M": "1000000",
-            "D|M": "1010101",
-        }
-
-        self.tokens         = (         # tokensの要素に t_を付けると定義可能
+        self.tokens             = (         # tokensの要素に t_を付けると定義可能
             "AT",       # "@"
             "LPAREN",   # "("
             "RPAREN",   # ")"
@@ -159,22 +134,22 @@ class HackCodeAnalyze:
         ) + self.reservedWords
         
         
-        self.t_AT       = r'@'
-        self.t_LPAREN   = r'\('
-        self.t_RPAREN   = r'\)'
-        self.t_EQUAL    = r'='
-        self.t_SEMI     = r';'
-        self.t_PLUS     = r'\+'
-        self.t_MINUS    = r'-'
-        self.t_AND      = r'&'
-        self.t_OR       = r'\|'
-        self.t_NOT      = r'!'
+        self.t_AT               = r'@'
+        self.t_LPAREN           = r'\('
+        self.t_RPAREN           = r'\)'
+        self.t_EQUAL            = r'='
+        self.t_SEMI             = r';'
+        self.t_PLUS             = r'\+'
+        self.t_MINUS            = r'-'
+        self.t_AND              = r'&'
+        self.t_OR               = r'\|'
+        self.t_NOT              = r'!'
 
     
     # Define a rule so we can track line numbers
     def t_newline(self, t):
         r'\n+'
-        t.lexer.lineno += len(t.value)
+        t.lexer.lineno          += len(t.value)
 
     # Error handling rule
     def t_error(self, t):
@@ -185,13 +160,13 @@ class HackCodeAnalyze:
     # Note addition of self parameter since we're in a class
     def t_NUMBER(self, t):
         r'\d+'
-        t.value = int(t.value)
+        t.value                 = int(t.value)
         return t
     
     def t_SYMBOL(self, t):
         r'[A-Za-z_\.\$:][A-Za-z0-9_\.\$:]*'
         if t.value in self.reservedWords:
-            t.type = t.value
+            t.type              = t.value
         return t
     
 
@@ -205,17 +180,17 @@ class HackCodeAnalyze:
         statements  : statement statements
                     | empty
         """
-        if len(p) == 3:
-            p[0] = [p[1]] + p[2]
+        if len(p)               == 3:
+            p[0]                = [p[1]] + p[2]
         else:
-            p[0] = []
+            p[0]                = []
 
     def p_empty(self, p):
         "empty : "
 
     def p_statement_a(self, p):
         "statement  : a_instruction"
-        p[0] = p[1]
+        p[0]                    = p[1]
         if self.debug:
             print("A命令")
         
@@ -223,13 +198,13 @@ class HackCodeAnalyze:
     
     def p_statement_l(self, p):
         "statement  : l_instruction"
-        p[0] = p[1]
+        p[0]                    = p[1]
         if self.debug:
             print("Label")
     
     def p_statement_c(self, p):
         "statement  : c_instruction"
-        p[0] = p[1]
+        p[0]                    = p[1]
         if self.debug:
             print("C命令")
         
@@ -238,8 +213,8 @@ class HackCodeAnalyze:
     
     def get_next_addr(self):
         value = None
-        if self.nextVarAddr < self.varTable["SCREEN"]:
-            value = self.nextVarAddr
+        if self.nextVarAddr     < self.varTable["SCREEN"]:
+            value               = self.nextVarAddr
         self.nextVarAddr += 1
         return value
 
@@ -250,33 +225,47 @@ class HackCodeAnalyze:
                         | AT NUMBER
         """
         if isinstance(p[2], int):
-            value = p[2]
+            value               = p[2]
             if self.debug:
                 print(f"0{value:015b}")
-            self.registers["A"] = value
-            p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"0{value:015b}", "at" : str(p[2])}
+            p[0]                = {
+                "instruction"   : "A", 
+                "type"          : f"{p.slice[2].type}", 
+                "code"          : f"0{value:015b}", 
+                "at"            : str(p[2])
+            }
         else:
-            label = str(p[2])
-            if label in self.varTable:
-                value = self.varTable[label]
-                self.registers["A"] = value
-                p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"0{value:015b}", "at" : str(p[2])}
+            label                   = str(p[2])
+            if label in self.varTable.keys():
+                value               = self.varTable[label]
+                p[0]                = {
+                    "instruction"   : "A", 
+                    "type"          : f"{p.slice[2].type}", 
+                    "code"          : f"0{value:015b}", 
+                    "at"            : str(p[2])
+                }
             else:
                 self.varTable[label] = -1 # 不定フラグ
-                self.registers["A"] = 0
-                p[0] = {"instruction": "A", "type": f"{p.slice[2].type}", "code" : f"pending", "at" : str(p[2])}
+                p[0]                = {
+                    "instruction"   : "A", 
+                    "type"          : f"{p.slice[2].type}", 
+                    "code"          : f"pending", 
+                    "at"            : str(p[2])
+                }
 
-    
     # L命令 (LABEL)
     def p_l_instruction(self, p):
         """
         l_instruction : LPAREN SYMBOL RPAREN
         """
-        label = p[2]
+        label                   = p[2]
         if label not in self.reservedVars:
             self.varTable[label] = self.pc
 
-        p[0] = {"instruction": "L", "label": label}
+        p[0]                    = {
+            "instruction": "L", 
+            "label": label
+        }
 
     #   C 命令
     # dest=comp;jump
@@ -289,52 +278,39 @@ class HackCodeAnalyze:
         
         """
 
-        dest = None
-        comp = None
-        jump = dict()
-        jump["code"] = "000"
+        dest                    = dict()
+        dest["code"]            = "000"
+        comp                    = None
+        jump                    = dict()
+        jump["code"]            = "000"
 
-        if len(p) == 2:
-            comp = p[1]
-        elif len(p) == 4 and p.slice[2].type == "SEMI":
-            comp = p[1]
-            jump = p[3]
-        elif len(p) == 4 and p.slice[2].type == "EQUAL":
-            dest = p[1]
-            comp = p[3]
-        elif len(p) == 6:
-            dest = p[1]
-            comp = p[3]
-            jump = p[5]
+        if len(p)               == 2:
+            comp                = p[1]
+        elif (
+            (len(p)             == 4 ) and 
+            (p.slice[2].type    == "SEMI")
+        ):
+            comp                = p[1]
+            jump                = p[3]
+        elif (
+            (len(p)             == 4) and 
+            (p.slice[2].type    == "EQUAL")
+        ):
+            dest                = p[1]
+            comp                = p[3]
+        elif len(p)             == 6:
+            dest                = p[1]
+            comp                = p[3]
+            jump                = p[5]
+        
+        cCode                   = f"111{comp["code"]}{dest["code"]}{jump["code"]}"
 
-        value, code = self.eval_comp(comp)
-
-        destCode = 0b000
-        if dest:
-            if "A" in dest:
-                self.registers["A"] = value
-                destCode |= 0b100
-            if "D" in dest:
-                self.registers["D"] = value
-                destCode |= 0b010
-            if "M" in dest:
-                addr            = self.registers["A"]
-                self.ram[addr]  = value
-                destCode |= 0b001
-        
-        destCode = f"{destCode:03b}"
-        
-        if code not in self.compCode:
-            raise Exception(f"Syntax error at: {comp}")
-        
-        cCode = f"111{self.compCode[code]}{destCode}{jump["code"]}"
-        p[0] = {
-            "instruction": "C",
-            "dest": dest,
-            "comp": comp,
-            "jump": jump,
-            "value": value,
-            "code" : cCode
+        p[0]                    = {
+            "instruction"       : "C",
+            "dest"              : dest,
+            "comp"              : comp,
+            "jump"              : jump,
+            "code"              : cCode
         }
 
 
@@ -350,17 +326,56 @@ class HackCodeAnalyze:
                 | M
                 | D
         """
-        p[0] = str(p[1])
 
-    def p_comp(self, p):
+        destCode                = 0b000
+        if "A" in str(p[1]):
+            destCode            |= 0b100
+        if "D" in str(p[1]):
+            destCode            |= 0b010
+        if "M" in str(p[1]):
+            destCode            |= 0b001
+        
+        destCode                = f"{destCode:03b}"
+        p[0]                    = {
+            "value"             : str(p[1]),
+            "code"              : destCode
+        }
+
+    def p_comp_1(self, p):      # 2項演算
         """
         comp        : registers
                     | registerNum
                     | registerFunc
-                    | register
+        """
+        p[0]                    = p[1]
+    
+    def p_comp_2(self, p):      # 単項演算
+        """
+        comp        : register
                     | num
         """
-        p[0] = p[1]
+
+        code                    = f"{str(p[1])}"
+
+        monomialPattern         = {
+            # a == 0
+            "0"                 : "0101010",
+            "1"                 : "0111111",
+            "-1"                : "0111010",
+            "D"                 : "0001100",
+            "A"                 : "0110000",
+
+            # a == 1
+            "M"                 : "1110000",
+        }
+
+        if code not in monomialPattern.keys():
+            raise f"Syntax Error : {code} Unknown"
+
+        p[0]                    = {
+            "value"             : code,
+            "code"              : monomialPattern[code]
+        }
     
     def p_registers(self, p):
         """
@@ -370,7 +385,33 @@ class HackCodeAnalyze:
                         | register OR register
         """
 
-        p[0] = {"op": p[2], "left": p[1], "right": p[3]}
+        code                    = f"{str(p[1])}{str(p[2])}{str(p[3])}"
+
+        registersPattern        = {
+            # a == 0
+            "D+A": "0000010",
+            "D-A": "0010011",
+            "A-D": "0000111",
+            "D&A": "0000000",
+            "D|A": "0010101",
+
+            # a == 1
+            "D+M": "1000010",
+            "D-M": "1010011",
+            "M-D": "1000111",
+            "D&M": "1000000",
+            "D|M": "1010101",
+        }
+
+        if code not in registersPattern.keys():
+            raise f"Syntax Error : {code} Unknown"
+        
+        p[0]                    = {
+            "op"                : p[2], 
+            "left"              : p[1], 
+            "right"             : p[3],
+            "code"              : registersPattern[code]
+        }
 
     def p_register_func(self, p):
         """
@@ -378,7 +419,28 @@ class HackCodeAnalyze:
                         | MINUS register
         """
 
-        p[0] = {"op": p[1], "value": p[2]}
+        code                    = f"{str(p[1])}{str(p[2])}"
+
+        registerFuncPattern     = {
+            # a == 0
+            "!D"                : "0001101",
+            "!A"                : "0110001",
+            "-D"                : "0001111",
+            "-A"                : "0110011",
+
+            # a == 1
+            "!M"                : "1110001",
+            "-M"                : "1110011",
+        }
+
+        if code not in registerFuncPattern.keys():
+            raise f"Syntax Error : {code} Unknown"
+
+        p[0]                    = {
+            "op"                : p[1], 
+            "value"             : p[2],
+            "code"              : registerFuncPattern[code]
+        }
     
     def p_register_num(self, p):
         """
@@ -386,28 +448,50 @@ class HackCodeAnalyze:
                         | register MINUS num
         """
 
-        p[0] = {"op": p[2], "left": p[1], "right": p[3]}
+        code                    = f"{str(p[1])}{str(p[2])}{str(p[3])}"
+        
+        registerNumPattern      = {
+            # a == 0
+            "D+1"               : "0011111",
+            "A+1"               : "0110111",
+            "D-1"               : "0001110",
+            "A-1"               : "0110010",
+
+            # a == 1
+            "M+1"               : "1110111",
+            "M-1"               : "1110010",
+        }
+
+        if code not in registerNumPattern.keys():
+            raise f"Syntax Error : {code} Unknown"
+
+        p[0]                    = {
+            "op"                : p[2], 
+            "left"              : p[1], 
+            "right"             : p[3],
+            "code"              : registerNumPattern[code]
+        }
 
     def p_num(self, p):
         """
         num : NUMBER
         """
         if p[1] in [0, 1]:
-            p[0] = p[1]
+            p[0]                = p[1]
         else:
             print("Value Error : The only available values are 1, 0, and -1.")
-            p[0] = 0
+            p[0]                = 0
 
     def p_minus_num(self, p):
         """
         num        : MINUS NUMBER
         """
-        if p[2] == 1:
-            p[0] = - p[2]
+        if p[2]                 == 1:
+            p[0]                = - p[2]
 
         else:
             print("Value Error : The only available values are 1, 0, and -1.")
-            p[0] = 0
+            p[0]                = 0
 
     
     
@@ -417,7 +501,7 @@ class HackCodeAnalyze:
                     | M
                     | D
         """
-        p[0] = str(p[1])
+        p[0]                    = str(p[1])
     
     
     def p_jump(self, p):
@@ -431,69 +515,28 @@ class HackCodeAnalyze:
                 | JMP
         """
 
-        jumpCode = dict()
+        jumpPattern             = {
+            "JGT"               : "001",
+            "JEQ"               : "010",
+            "JGE"               : "011",
+            "JLT"               : "100",
+            "JNE"               : "101",
+            "JLE"               : "110",
+            "JMP"               : "111"
+        }
 
-        jumpCode["type"] = p[1]
-        if str(p[1]) == "JGT":
-            jumpCode["code"] = f"001"
-        elif str(p[1]) == "JEQ":
-            jumpCode["code"] = f"010"
-        elif str(p[1]) == "JGE":
-            jumpCode["code"] = f"011"
-        elif str(p[1]) == "JLT":
-            jumpCode["code"] = f"100"
-        elif str(p[1]) == "JNE":
-            jumpCode["code"] = f"101"
-        elif str(p[1]) == "JLE":
-            jumpCode["code"] = f"110"
-        elif str(p[1]) == "JMP":
-            jumpCode["code"] = f"111"
-        else:
-            print("ERROR : JUMP")
-            jumpCode["code"] = f"000"
+        jumpCode                = dict()
+        jumpCode["type"]        = str(p[1])
+
+
+
+        if jumpCode["type"] not in jumpPattern.keys():
+            raise f"Syntax Error : {jumpCode["type"]} Unknown"
+        
+        jumpCode["code"]        = jumpPattern[jumpCode["type"]]
         
         p[0] = jumpCode
-    
 
-    def eval_comp(self, node): # comp 評価関数
-
-        # レジスタ単体
-        if isinstance(node, str):
-            if node == "A":
-                return self.registers["A"], "A"
-            if node == "D":
-                return self.registers["D"] ,"D"
-            if node == "M":
-                return self.ram[self.registers["A"]], "M"
-
-        # 数字
-        if isinstance(node, int):
-            return node, f"{node}"
-
-        # 単項
-        if ("op" in node) and ("value" in node):
-            val, code = self.eval_comp(node["value"])
-            if node["op"] == "!":
-                return (~val) & 0xFFFF, f"!{code}"
-            if node["op"] == "-":
-                return -val, f"-{code}"
-
-        # 二項
-        if "op" in node:
-            left, lCode = self.eval_comp(node["left"])
-            right, rCode = self.eval_comp(node["right"])
-            op = node["op"]
-
-            if op == "+":
-                return (left + right) & 0xFFFF, f"{lCode}+{rCode}"
-            if op == "-":
-                return (left - right) & 0xFFFF, f"{lCode}-{rCode}"
-            if op == "&":
-                return (left & right) & 0xFFFF, f"{lCode}&{rCode}"
-            if op == "|":
-                return (left | right) & 0xFFFF, f"{lCode}|{rCode}"
-
-        raise Exception("Unknown comp node: " + str(node))
     
     def asm(self):
         """
@@ -502,12 +545,12 @@ class HackCodeAnalyze:
 
         out = []
         for i in self.parse():
-            if i["instruction"] == "A":
-                if i["type"] == "NUMBER":
+            if i["instruction"]     == "A":
+                if i["type"]        == "NUMBER":
                     out.append(i["code"])
                 else:
                     if (
-                        (i["code"] == "pending") and 
+                        (i["code"]              == "pending") and 
                         (self.varTable[i["at"]] == -1)
                     ):
                         addr = self.get_next_addr()
@@ -517,7 +560,7 @@ class HackCodeAnalyze:
                             self.varTable[i["at"]] = 0
                     out.append(f"0{self.varTable[i["at"]]:015b}")
 
-            elif i["instruction"] == "C":
+            elif i["instruction"]   == "C":
                 out.append(i["code"])
 
         return out
@@ -526,31 +569,31 @@ class HackCodeAnalyze:
 if __name__ == "__main__":
     debug = False
 
-    if len(argv) < 2:
-        file = "main.asm"
+    if len(argv)    < 2:
+        file        = "main.asm"
     else:
-        file = argv[1]
+        file        = argv[1]
 
     with open(file, "r", encoding="UTF-8") as source:
-        program = source.read()
+        program     = source.read()
 
     with HackCodeAnalyze(program, debug = debug) as l:
         # print(l)
-        result = l.asm()
+        result      = l.asm()
     
-    dirName = os.path.dirname(file)
-    buildDir = f"{dirName}/build"
+    dirName         = os.path.dirname(file)
+    buildDir        = f"{dirName}/build"
     os.makedirs(buildDir, exist_ok=True)
 
-    baseName = os.path.splitext(os.path.basename(file))[0]  # ファイル名だけ取り出す
-    hackFile = os.path.join(buildDir, f"{baseName}.hack")
+    baseName        = os.path.splitext(os.path.basename(file))[0]  # ファイル名だけ取り出す
+    hackFile        = os.path.join(buildDir, f"{baseName}.hack")
 
     with open(hackFile, "w", encoding="UTF-8") as f:
         f.write("")
     
     with open(hackFile, "a", encoding="UTF-8") as f:
         for r in result:
-            print(r, file=f)
+            print(r, file = f)
             if (debug):
                 print(r)
         
