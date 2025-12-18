@@ -374,7 +374,7 @@ class HackCodeAnalyze:
 
         p[0]                    = {
             "value"             : code,
-            "code"              : monomialPattern["code"]
+            "code"              : monomialPattern[code]
         }
     
     def p_registers(self, p):
