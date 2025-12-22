@@ -32,6 +32,7 @@ class HackCodeAnalyze:
         )
     
     def parse(self): # yacc による構文解析
+        self.pc                 = 0
         return self.yacc.parse(
             self.code, 
             lexer               = self.lexer
@@ -93,7 +94,7 @@ class HackCodeAnalyze:
             self.reservedVars.append(f"R{i}")
 
         self.nextVarAddr        = self.registerNum
-        self.pc = 0
+        self.pc                 = 0
 
         self.t_ignore           = ' \t'     # A string containing ignored characters (spaces and tabs)
         self.t_ignore_comment   = r'//.*'
