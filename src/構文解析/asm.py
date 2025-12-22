@@ -342,7 +342,7 @@ class HackCodeAnalyze:
             "code"              : destCode
         }
 
-    def p_comp_1(self, p):      # 2項演算
+    def p_comp_1(self, p):      # 演算
         """
         comp        : registers
                     | registerNum
@@ -350,7 +350,7 @@ class HackCodeAnalyze:
         """
         p[0]                    = p[1]
     
-    def p_comp_2(self, p):      # 単項演算
+    def p_comp_2(self, p):      # レジスタ単体 or 数値
         """
         comp        : register
                     | num
@@ -528,8 +528,6 @@ class HackCodeAnalyze:
 
         jumpCode                = dict()
         jumpCode["type"]        = str(p[1])
-
-
 
         if jumpCode["type"] not in jumpPattern.keys():
             raise f"Syntax Error : {jumpCode["type"]} Unknown"
