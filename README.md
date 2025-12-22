@@ -5,4 +5,6 @@ pip install ply
 ```
 
 ## References
-> [PLY (Python Lex-Yacc)](https://ply.readthedocs.io/en/latest/index.html)
+> [PLY (Python Lex-Yacc)](https://ply.readthedocs.io/en/latest/index.html)  
+
+> [Nand2Tetris](https://nand2tetris.github.io/web-ide/cpu)
