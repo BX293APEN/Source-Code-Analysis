@@ -543,24 +543,24 @@ class HackCodeAnalyze:
         """
 
         out = []
-        for i in self.parse():
-            if i["instruction"]     == "A":
-                if i["type"]        == "NUMBER":
-                    out.append(i["code"])
+        for inst in self.parse():
+            if inst["instruction"]      == "A":
+                if inst["type"]         == "NUMBER":
+                    out.append(inst["code"])
                 else:
                     if (
-                        (i["code"]              == "pending") and 
-                        (self.varTable[i["at"]] == -1)
+                        (inst["code"]                   == "pending") and 
+                        (self.varTable[inst["at"]]      == -1)
                     ):
                         addr = self.get_next_addr()
                         if addr is not None:
-                            self.varTable[i["at"]] = addr
+                            self.varTable[inst["at"]]   = addr
                         else: 
-                            self.varTable[i["at"]] = 0
-                    out.append(f"0{self.varTable[i["at"]]:015b}")
+                            self.varTable[inst["at"]]   = 0
+                    out.append(f"0{self.varTable[inst["at"]]:015b}")
 
-            elif i["instruction"]   == "C":
-                out.append(i["code"])
+            elif inst["instruction"]    == "C":
+                out.append(inst["code"])
 
         return out
     
